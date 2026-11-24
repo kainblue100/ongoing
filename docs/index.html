@@ -153,9 +153,7 @@
 <div class="deck">
   <img src="slides/01.png" alt="第 1 页：切面上分开的区域 A 和 B，沿厚度用一条路径连成一块，旁边是四步规划">
   <img src="slides/02.png" alt="第 2 页：3D 重构目前进展，小鼠体积、分类、人肺癌连续切片，以及三维相通还没有做">
-  <iframe src="3d-2d-plan.pdf" title="四页幻灯片，可在页面里翻"></iframe>
 </div>
-<p class="when"><a href="3d-2d-plan.pptx">下载 pptx</a>。<a href="3d-2d-plan.pdf">下载 pdf</a>。2D 的两页也在这份文件里，并嵌在下一节。</p>
 </section>
 
 <section id="evolution">
@@ -200,7 +198,7 @@
   <img src="slides/03.png" alt="第 3 页：采不到的时间点用虚线框表示，模式 P1 到 P2 再到 P3 画成一条变化">
   <img src="slides/04.png" alt="第 4 页：2D 切片演化目前进展，17 张的静态模式、三张切片内部的树，动态过程还没有做">
 </div>
-<p class="when">上一节的 pdf 里可以连着翻这四页。<a href="3d-2d-plan.pptx">下载 pptx</a>。</p>
+<p class="when"><a href="3d-2d-plan.pptx">下载 pptx</a>。<a href="3d-2d-plan.pdf">下载 pdf</a>。</p>
 </section>
 
 <section id="virtual">
@@ -216,7 +214,21 @@
 <p>2026-11-24 17:14，效应模型训到第 <span class="num">6300</span> 步，读过约 <span class="num">2217</span> 万个细胞。这一步训练损失 1.1332，验证损失 1.5587。留出细胞数是 0。还没有用 Cell-Eval 或 cell-eval2 跟 STATE 比，这组损失还不是结果。</p>
 <p>实验站可以在本地改学习率、步数和知识源开关，立刻看到预测曲线变。它说明 PIE 这一类结构怎么读 STRING 和 DepMap，不能当作这次效应模型的成绩。</p>
 <h3>期待目标</h3>
-<p>这一阶段训稳之后，再做参考转移和细胞系特异的表观残差，并用 Cell-Eval、cell-eval2 跟 STATE 比。比完之前不把训练损失写成超过 STATE。</p>
+<p>这一阶段训稳之后，再做参考转移和细胞系特异的表观残差，并用 Cell-Eval、cell-eval2 跟 STATE 比。比完之前不把训练损失写成超过 STATE。要对齐的外部标准是 2026 年虚拟细胞挑战赛的前三名。下图是官方公布的奖金，每一名都是一半现金、一半 NVIDIA Brev 额度。</p>
+<svg class="schematic" viewBox="0 0 820 250" role="img" aria-label="2026 年虚拟细胞挑战赛前三名奖金：10 万美元、5 万美元、2.5 万美元">
+  <title>2026 年虚拟细胞挑战赛前三名奖金</title>
+  <text x="16" y="28" font-size="16" font-weight="700" fill="#1c1917">2026 年前三名</text>
+  <text x="16" y="68" font-size="14" fill="#1c1917">第一名 BioInsight，CellularAI</text>
+  <rect x="16" y="78" width="620" height="32" fill="#9a3412"/>
+  <text x="28" y="99" font-size="15" fill="white">100,000 美元</text>
+  <text x="16" y="140" font-size="14" fill="#1c1917">第二名 FlowState</text>
+  <rect x="16" y="150" width="310" height="32" fill="#1d4e89"/>
+  <text x="28" y="171" font-size="15" fill="white">50,000 美元</text>
+  <text x="16" y="212" font-size="14" fill="#1c1917">第三名 X-team，X-Cell Transfer</text>
+  <rect x="16" y="222" width="155" height="22" fill="#0f766e"/>
+  <text x="180" y="238" font-size="15" fill="#1c1917">25,000 美元</text>
+</svg>
+<p class="when">第三名是 25,000 美元。Arc Institute，2026-11-19，<a href="https://arcinstitute.org/news/virtual-cell-challenge-2026-wrap-up">Virtual Cell Challenge 2026: Winners and Wrap-Up</a>。条的长度按公布金额。</p>
 </section>
 
 <section id="morphgate">
@@ -232,6 +244,26 @@
 <h3>当前结果</h3>
 <p>后一轮 HER2 四个测试折的平均：相关 0.0788，SSIM 0.0447，高变基因相关 0.1267，空间可变基因相关 0.2236。cSCC 上相关 0.1398，SSIM 0.0768，高变基因相关 0.1435，空间可变基因相关 0.1854。四项门槛都没过，文章因此没改。</p>
 <p>文章里仍是更早的对照：去掉门控的 MorphGate，HER2 相关 0.071，SSIM 0.045，高变基因相关 0.072，空间可变基因相关 0.141；GHIST-spot 是 0.044、0.018、0.044、0.063。文献里 GHIST 的 0.16、0.10、0.20、0.27 是原文数字，不是这两次重算。</p>
+<p>下面是已经核对过文件清单或服务器副本的切片数。棕色是细胞分辨率，蓝色是斑点。</p>
+<svg class="schematic" viewBox="0 0 820 300" role="img" aria-label="已核对的各癌种空间转录组切片数">
+  <title>已核对的各癌种空间转录组切片数</title>
+  <text x="16" y="26" font-size="16" font-weight="700" fill="#1c1917">各癌种已核对的切片数</text>
+  <rect x="560" y="12" width="14" height="14" fill="#1d4e89"/><text x="580" y="24" font-size="13" fill="#44403c">斑点</text>
+  <rect x="640" y="12" width="14" height="14" fill="#9a3412"/><text x="660" y="24" font-size="13" fill="#44403c">细胞</text>
+  <text x="16" y="64" font-size="14" fill="#1c1917">肺腺癌 Visium，30 人</text>
+  <rect x="250" y="46" width="500" height="24" fill="#1d4e89"/><text x="258" y="63" font-size="13" fill="white">44 张</text>
+  <text x="16" y="106" font-size="14" fill="#1c1917">乳腺癌 HER2ST，8 人</text>
+  <rect x="250" y="88" width="409" height="24" fill="#1d4e89"/><text x="258" y="105" font-size="13" fill="white">36 张</text>
+  <text x="16" y="148" font-size="14" fill="#1c1917">非小细胞肺癌 Xenium，10 人</text>
+  <rect x="250" y="130" width="250" height="24" fill="#9a3412"/><text x="258" y="147" font-size="13" fill="white">22 张</text>
+  <text x="16" y="190" font-size="14" fill="#1c1917">乳腺癌 Xenium，17 人</text>
+  <rect x="250" y="172" width="216" height="24" fill="#9a3412"/><text x="258" y="189" font-size="13" fill="white">19 张</text>
+  <text x="16" y="232" font-size="14" fill="#1c1917">肺腺癌 Xenium，17 人</text>
+  <rect x="250" y="214" width="193" height="24" fill="#9a3412"/><text x="258" y="231" font-size="13" fill="white">17 张</text>
+  <text x="16" y="274" font-size="14" fill="#1c1917">皮肤鳞癌，基准四折</text>
+  <rect x="250" y="256" width="136" height="24" fill="#1d4e89"/><text x="258" y="273" font-size="13" fill="white">12 张</text>
+</svg>
+<p class="when">肺腺癌两行是 Takano。HER2ST 是 Andersson，36 张、8 个供体。皮肤鳞癌四折是 P2、P5、P9、P10，各 3 张。两行 Xenium 是 GSE311609 的文件清单，22 张肺来自 10 个供者，19 张乳腺来自 17 个供者。直肠癌 SPATNIC 的 52 例没有公开入口，没有画进这张图。</p>
 <h3>期待目标</h3>
 <p>在我们自己的这套定义上，HER2 四折平均同时超过相关 0.16、SSIM 0.10、高变基因相关 0.20、空间可变基因相关 0.27。四项都过了再改文章。没过之前，文章保持现在的对照，不把文献里的 0.16 画成这次重算的结果。</p>
 </section>
