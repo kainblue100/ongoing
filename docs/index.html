@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>四项进行中的工作</title>
+<style>
+  :root { color-scheme: light; }
+  body { margin: 0; background: #f4f1ea; color: #1c1917; font: 17px/1.65 "Source Han Sans SC", "Noto Sans SC", "Microsoft YaHei", sans-serif; }
+  main { max-width: 1080px; margin: 0 auto; padding: 48px 22px 88px; }
+  h1 { font-size: 36px; line-height: 1.2; margin: 0 0 10px; }
+  h2 { font-size: 26px; margin: 48px 0 8px; }
+  h3 { font-size: 15px; letter-spacing: 0.04em; margin: 18px 0 4px; color: #9a3412; }
+  p { max-width: 74ch; }
+  a { color: #9a3412; }
+  .lead { font-size: 18px; }
+  .when { color: #57534e; font-size: 14px; }
+  table { border-collapse: collapse; width: 100%; margin: 22px 0 8px; background: white; font-size: 15px; }
+  th, td { border: 1px solid #e7e5e4; padding: 10px 12px; text-align: left; vertical-align: top; }
+  th { background: #292524; color: white; font-weight: 600; }
+  section { background: white; border: 1px solid #e7e5e4; padding: 8px 26px 22px; margin-top: 22px; }
+  .num { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<main>
+<h1>四项进行中的工作</h1>
+<p class="lead">3D 重构、2D 切片演化、虚拟细胞、H&amp;E 预测空转。四件事用的标本和问题都不一样，下面分开写目的、原理、当前结果和还要走到的地方。</p>
+<p class="when">Tahoe 的分片数记于 2026-11-24 09:21。其余数字来自已经公开的页面和文章。</p>
+
+<table>
+<thead><tr><th>项目</th><th>当前结果</th><th>入口</th></tr></thead>
+<tbody>
+<tr><td>3D 重构</td><td>小鼠肺 150 张连续切片，1.5 mm 组织块，11.7 亿体素</td><td><a href="https://kainblue100.github.io/coda-mouse-lung-volume/">体积页面</a></td></tr>
+<tr><td>2D 切片演化</td><td>三张人肺 Xenium，8 个模式，每张切片一棵进化树</td><td><a href="https://kainblue100.github.io/annotile/">Annotile</a></td></tr>
+<tr><td>虚拟细胞</td><td>Tahoe 训练分片 2613 / 3388 已转换；基座还没训</td><td>数据在服务器上，页面还没有</td></tr>
+<tr><td>H&amp;E 预测空转</td><td>HER2 四折平均相关 0.071，低于文献里 GHIST 的 0.16</td><td><a href="https://github.com/kainblue100/morphgate/blob/main/docs/article.md">MorphGate 文章</a></td></tr>
+</tbody>
+</table>
+
+<section id="volume">
+<h2>3D 重构</h2>
+<h3>目的</h3>
+<p>把一块肺的连续切片叠回它本来的厚度，看到血管和细支气管在组织块里怎么走，而不是只看一张平面。</p>
+<h3>原理</h3>
+<p>用的是 CODA 的原流程。每张切片先做组织掩膜，相邻切片之间做仿射加弹性配准。DeepLabv3+、ResNet-50 在 5 张有标注的切片上训练，再标完全部 150 张。配准场放大后套到分类图上，按真实层距堆成标签体积。渲染用发射和吸收的光线行进，颜色是分类器自己的调色板。</p>
+<h3>当前结果</h3>
+<p>小鼠肺数据集 150 张、每张 10 µm。体积网格 2983 × 2497 × 150，共 1,117,282,650 个体素。物理尺寸 11.93 × 9.99 × 1.50 mm，体积 0.179 cm³，大约是一整个小鼠肺的 13.8%。体素是 4 × 4 × 10 µm。七类里肺泡占组织的大头，血管 0.228 mm³，细支气管 0.334 mm³，分类器标成癌的体素只有 0.023 mm³。验证损失 0.02596。页面上的旋转视频是这同一个体积。</p>
+<p>这是 1.5 mm 厚的组织块。小鼠肺大约长 10 到 20 mm，所以画面上是一块带支气管血管树的组织，还不是整个肺的外形。血管和气道在图里显得比数据粗，因为渲染的发光把一两体素厚的结构加宽了。人体解剖肺模型和程序生成的小鼠肺叶没有放进这个体积。</p>
+<h3>期待目标</h3>
+<p>近处要守住的是：再加切片时仍然按真实层距堆，外形和测量分开标。整肺外形需要再有几百张同一只肺的切片。人肺癌的三维体积要另做：公开的一例非小细胞肺癌有 34 张连续 5 µm 切片，其中 6 张 CosMx 已配准，层间距 30 µm，六层共 340,644 个细胞位置，已经画在 Annotile 上。那是位置，细胞类型还在原作者的 Seurat 对象里，所以还没有叠成带标签的人肺体积，也没有和这只小鼠的体积合并。</p>
+</section>
+
+<section id="evolution">
+<h2>2D 切片演化</h2>
+<h3>目的</h3>
+<p>在一张肺切片上看出组织模式怎么从分化上皮那边连到别处，并把这条空间顺序做成能看的进化图和短视频。</p>
+<h3>原理</h3>
+<p>三张公开人肺 Xenium 先切成边长 400 µm、至少 30 个细胞的小窗，共 785 个。特征是细胞类型比例、153 个共有基因的 16 个主成分，以及配准 H&amp;E 的颜色和纹理。细簇再用高斯混合按 BIC 收成 8 个模式。相邻小窗同模式的比例是 83.6%。种子是 42。</p>
+<p>进化关系按切片分开做。一步只能走在同一张切片上边相邻的小窗之间，代价是上面那份特征的距离。根是这张切片上分化上皮比例最高的小窗。做法对应 Pham 等人 2023 年的 pseudo-time-space。没有剪接和未剪接计数，所以没有 RNA velocity。三个供体没有接成一条轨迹。</p>
+<h3>当前结果</h3>
+<p>5k 的视频枝是 P7 → P4，上皮比例 0.47 到 0.21，内皮 0.06 到 0.34。lc 是 P5 → P1，上皮 0.27 到 0.48，内皮 0.43 到 0.07。luad 是 P7 → P2 → P8，上皮 0.53、0.59 再到 0.11，到 P8 时内皮 0.41。转移箭头画在配准后的 H&amp;E 上。t-SNE 和 UMAP 里，灰线和红线是这棵空间树，线表示切片上相邻。</p>
+<p>表达程序可以叠在同一个模式上。P2 上皮 z 分数 +1.38，增殖 −0.10。P3 的增殖 +2.59、基质 +1.32、CXCL9 +2.01 同时高，分数主要来自 lc。面板里没有 ISG15、IFI27、IFIT3、HLA-DRA，所以没有做患者级 archetype，也没有做跨患者 ecotype。</p>
+<p>演化视频约 8 秒。玻璃盒后面的肺是 BodyParts3D 的成人解剖模型，只作外形，不是这三张切片重建出来的。</p>
+<h3>期待目标</h3>
+<p>下一步要用同一块组织的连续切片，让 z 方向的变化也有细胞类型，而不是只有密度。三张 Xenium 继续保持三个供体、三条轨迹。</p>
+</section>
+
+<section id="virtual">
+<h2>虚拟细胞</h2>
+<h3>目的</h3>
+<p>在实验还没做的时候，估计敲低一个基因或换一种细胞之后，转录组会往哪边动。</p>
+<h3>原理</h3>
+<p>大规模路线跟着虚拟细胞基座的想法：先在大量观察细胞上学细胞状态，再在扰动过的细胞上学转移。数据用 Tahoe-100M 的训练集分片。每个分片转成无压缩的 h5，计数能放进 int16 就用 int16，基因按指针索引，转完的 parquet 删掉，避免占满磁盘。3388 个训练分片都核对过之后才开始基座训练。</p>
+<p>浏览器里的实验站是另一件小得多的东西。它按 Arc 公开的 PIE 结构，把知识做成 token，在 16 个基因、若干细胞系和扰动的合成汇总表上训练一个能看懂的小模型。那张表的数字按细胞周期、TP53、mTOR、KRAS/MAPK 和干扰素几条通路书写，不是 Replogle 的原始计数，也不是 Tahoe。</p>
+<h3>当前结果</h3>
+<p>2026-11-24 09:21，服务器上已有 <span class="num">2613 / 3388</span> 个 h5，文件名从 <span class="num">train-00000</span> 到 <span class="num">train-02612</span>。下载和转换仍在原来的监督进程里跑。元数据目录的 7 个文件还在。基座训练没有开始。</p>
+<p>实验站可以在本地改学习率、步数和知识源开关，立刻看到预测曲线变。它说明 PIE 这一类结构怎么读 STRING 和 DepMap，不能当作 Tahoe 基座的成绩。</p>
+<h3>期待目标</h3>
+<p>3388 个分片到齐、抽查计数类型和细胞数之后，再在空闲的 GPU 上训练基座。训练开始前不把浏览器小模型的相关写成虚拟细胞的结果。</p>
+</section>
+
+<section id="morphgate">
+<h2>H&amp;E 预测空转</h2>
+<h3>目的</h3>
+<p>只看苏木精伊红染色，预测每个斑点的基因表达，并在同一套划分上和已发表的 GHIST 比。</p>
+<h3>原理</h3>
+<p>协议来自 Wang 等人 Nature Communications 2025 的基准。HER2 阳性乳腺癌和皮肤鳞癌各分四折，同一病人的相邻切片留在同一折。两折训练，一折验证，一折测试。报的是四个测试折的平均。基因是全体切片共有、方差最高的 785 个（HER2）和 997 个（cSCC）。高变基因是其中方差最高的 30 个。空间可变基因按阵列上 6 个近邻的 Moran's I 取 20 个。这和原文的 scran、SPARK-X 名单不完全一样。</p>
+<p>MorphGate 用斑点及其六个近邻的染色特征做岭回归。门控会把训练集里相关低于 0.10 的基因填成训练集均值。去掉门控则 785 或 997 个基因都回归。GHIST-spot 只保留组成关系：6 个表达程序，再用染色特征预测程序权重。Fu 等人原文的深度网络和 Hover-Net 细胞核分割没有重跑。原文报告的 0.16 写在表里单独一行。</p>
+<h3>当前结果</h3>
+<p>HER2，四个测试折的平均：去掉门控的 MorphGate，Pearson 相关 0.071，SSIM 0.045，高变基因相关 0.072，空间可变基因相关 0.141。同一次运行的 GHIST-spot 是 0.044、0.018、0.044、0.063。带门控的全基因相关掉到 0.025，因为多数基因被填成常数。cSCC 上去掉门控是 0.099，GHIST-spot 是 0.093。</p>
+<p>文献里 GHIST 在 HER2 上的平均相关是 0.16，SSIM 0.10，高变基因 0.20，空间可变基因 0.27。这次两个模型都还低于这四项。FASN 的空间图两边都把高低表达压在一条窄带里，组织轮廓还在。</p>
+<h3>期待目标</h3>
+<p>在我们自己的这套定义上，HER2 四折平均同时超过相关 0.16、SSIM 0.10、高变基因相关 0.20、空间可变基因相关 0.27。四项都过了再改文章。没过之前，文章保持现在的对照，不把文献里的 0.16 画成这次重算的结果。</p>
+</section>
+</main>
+</body>
+</html>
