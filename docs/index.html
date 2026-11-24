@@ -37,17 +37,6 @@
   .col ul { margin: 0; padding-left: 1.05em; font-size: 13px; line-height: 1.45; }
   .col li { margin: 0 0 3px; }
   .rail { margin: 4px 0 0; font-size: 14px; color: #57534e; }
-  .flow { margin: 8px 0 4px; }
-  .flow-k { font-weight: 600; font-size: 15px; margin: 14px 0 6px; }
-  .flow-scroll { overflow-x: auto; }
-  .flow-row { --head: 64px; --icon: 54px; position: relative; display: grid; gap: 8px; min-width: 760px; }
-  .flow-row.n3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .flow-row.n4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .flow-row.n5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-  .flow-row::before { content: ""; position: absolute; z-index: 0; left: 6%; right: 6%; top: calc(12px + var(--head) + 6px + var(--icon) / 2); height: 2px; background: #8eb3cc; }
-  .flow-row.moving::before { background: repeating-linear-gradient(90deg, #1d4e73 0 10px, #c5d7e4 10px 18px); background-size: 18px 2px; animation: march 0.9s linear infinite; }
-  @keyframes march { to { background-position: 18px 0; } }
-  @media (prefers-reduced-motion: reduce) { .flow-row.moving::before { animation: none; background: #8eb3cc; } }
   svg.schematic { width: 100%; max-width: 820px; height: auto; background: #fafaf9; border: 1px solid #e7e5e4; display: block; margin: 12px 0 6px; }
   .deck img, .deck iframe { width: 100%; max-width: 960px; display: block; border: 1px solid #e7e5e4; background: white; margin: 12px 0; }
   .deck iframe { height: 640px; }
@@ -115,67 +104,27 @@
 </div>
 </div>
 </figure>
-<p class="rail">从左到右一层套一层。线上的光点表示测量要沿这条线走：先配准成体积，再读邻域。</p>
-<p class="flow-k">Tan 等人的梯子</p>
-<div class="flow"><div class="flow-scroll"><div class="flow-row moving n4" aria-label="肿瘤数字孪生的四级梯子">
-<article class="col"><header><span class="n">1</span><span class="t">虚拟细胞<small>零件</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>表示细胞</li><li>还不是孪生</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">虚拟敲除<small>零件</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>模拟基因扰动</li><li>还不是孪生</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">虚拟类器官<small>靠近孪生</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>三维肿瘤微环境</li><li>细胞在测到的邻域里一起变</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">虚拟病人<small>靠近孪生</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>随这个人的新数据更新</li><li>用来试治疗</li><li>只建一次叫数字影子</li></ul></article>
-</div></div></div>
-<p class="flow-k">四项接到结构、环境、行为</p>
-<div class="flow"><div class="flow-scroll"><div class="flow-row moving n5" aria-label="四项工作接到数字孪生的哪一件，以及这一圈还没有合上">
-<article class="col"><header><span class="n">1</span><span class="t">观测<small>H&amp;E 预测空转</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>存档切片多，空转贵</li><li>少数实测切片当锚</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">结构<small>3D 重构</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>按真实层距配准</li><li>叠成一块体积</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">环境<small>2D 切片演化</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>哪些状态相邻</li><li>轨迹从哪里长出来</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">行为<small>虚拟细胞</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>药物或基因扰动</li><li>细胞状态怎么转移</li></ul></article>
-<article class="col"><header><span class="n">5</span><span class="t">还没合上<small>不能选药</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>小鼠体积、三张人肺、Tahoe、HER2 来自不同标本</li><li>验证和不确定性还没有做</li></ul></article>
-</div></div></div>
-<p class="rail">同一块人肺癌上的四类测量能互相改写之后，才开始是这个病人的数字孪生。</p>
+<p class="rail">从左到右，尺度一层套一层：分子在细胞内，细胞在邻域里，邻域在组织里，组织在这个病人里。圆之间的线表示这种包含。顶上的用途是综述里写下的目标。测量时的顺序是另一件事：先把切片配准成体积，再在体积里读邻域。</p>
+<p>Tan 等人 2026 年的综述把肿瘤数字孪生写成一架梯子：虚拟细胞，虚拟敲除或过表达，虚拟类器官，虚拟病人。前两级是零件，用来表示细胞、模拟基因扰动。后两级才靠近孪生：类器官把三维的肿瘤微环境建出来，虚拟病人则随这个人的新数据更新，并用来试治疗。他们同时写明工程上的严格定义：虚拟模型和活的对象之间要有持续的双向数据联系。只建一次、或偶尔改一次的，叫做数字影子。</p>
+<p>Kemkar 等人 2024 年引用美国国家科学院的定义，把孪生要模仿的东西收成三件：结构、这个结构所处的环境、以及行为。模型用实物新来的数据更新，预测要能参与决定。他们提出的接法是：细胞尺度的信号模型告诉每个细胞怎么反应，多智能体再把这些细胞放进该病人自己的微环境里，推出组织尺度随时间的变化。用到临床决定之前，还要做验证、确认和不确定性量化。</p>
+<p>四项就按这三件事接。H&amp;E 预测空转负责可扩展的观测：医院里大量存档的是染色切片，空间转录组贵，也覆盖不了旧切片，所以用少数实测切片当锚，把空间状态补到其余切片上。3D 重构负责结构，按真实层距把这些状态配准成一块体积。2D 切片演化负责环境里的空间关系，读出这块体积上哪些状态相邻、轨迹从哪里长出来。虚拟细胞负责行为，给出药物或基因扰动之后细胞状态怎么转移。四步用的是同一块组织时，细胞才能在测到的邻域里一起变，这就是从虚拟细胞走到虚拟类器官的那一层。类器官再被后来的切片、影像和疗效改写，才走到虚拟病人。</p>
+<p>这一圈现在还没有合上。小鼠的 1.5 mm 体积、三张不连续的人肺 Xenium、Tahoe 语料和 HER2 染色切片来自不同标本。换成同一块人肺癌组织上的这四类测量，并且新测量能改回模型之后，才开始是这个病人的数字孪生。验证和不确定性还没有做，所以还不能拿来选药。</p>
 <p class="when">尺度分法来自 Bunne 等，Cell，2024，<a href="https://doi.org/10.1016/j.cell.2024.11.015">10.1016/j.cell.2024.11.015</a>。Tan 等，Biomedicines，2026，<a href="https://www.mdpi.com/2227-9059/14/11/2689">14(11):2689</a>。Kemkar 等，Frontiers in Physiology，2024，<a href="https://doi.org/10.3389/fphys.2024.1473125">10.3389/fphys.2024.1473125</a>。</p>
 </section>
 
 <section id="volume">
 <h2>3D 重构</h2>
 <h3>目的</h3>
-<p class="flow-k">一张切片看不到的东西</p>
-<div class="flow"><div class="flow-scroll"><div class="flow-row n4" aria-label="为什么要做三维">
-<article class="col"><header><span class="n">1</span><span class="t">一个平面<small>几微米厚</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>只切到其中一个面</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">形状随角度变<small>切面会骗人</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>细胞团</li><li>导管</li><li>浸润前沿</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">要在整块里数清<small>Kiemen 与 Wood</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>启动、浸润、治疗反应</li><li>少见病灶和少数细胞</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">连续切片<small>他们列出的一条路</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>形态和分子叠到同一坐标</li></ul></article>
-</div></div></div>
-<p class="flow-k">临床病理的三件事</p>
-<div class="flow"><div class="flow-scroll"><div class="flow-row n4" aria-label="Yoshikawa 综述里的三件临床任务，以及这项工作现在做到哪">
-<article class="col"><header><span class="n">1</span><span class="t">找到病灶</span></header><div class="icon" aria-hidden="true"></div><ul><li>微小浸润、微转移</li><li>可能不在抽到的切片上</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">判断结构</span></header><div class="icon" aria-hidden="true"></div><ul><li>贴壁、乳头、腺泡、微乳头、实性</li><li>二维上专家重复性不高</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">测量范围</span></header><div class="icon" aria-hidden="true"></div><ul><li>最大径和灶数取自切面</li><li>不规则肿块会量偏</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">现在做到</span></header><div class="icon" aria-hidden="true"></div><ul><li>小鼠肺的真实层距体积</li><li>更大样本还没证明提高诊断</li><li>还不是临床诊断</li></ul></article>
-</div></div></div>
+<p>生物学上，器官和肿瘤本来是立体的。一张几微米的切片只切到其中一个平面，细胞团、导管和浸润前沿在切面上的形状会随切的角度变。Kiemen 和 Wood 在 2026 年的综述里把这件事写成癌症研究要补上的一环：启动、浸润和对治疗的反应都发生在三维结构里，少见的病灶和少数细胞群也要在整块组织里才数得清。连续切片是他们列出的一条路，因为切完还能把形态和多种分子测量叠到同一套坐标上。</p>
+<p>临床上，Yoshikawa 等人 2024 年的综述把常规病理拆成三件事：找到病灶、判断结构、测量范围。小而散的病灶，例如微小浸润和微转移，可能不在抽到的那几张切片上。肺腺癌还要分成贴壁、乳头、腺泡、微乳头和实性几种生长方式，侵袭程度不同，影响分期和预后，但专家在二维切片上的分型重复性不高。肿瘤最大径和灶的数目也取自切面，不规则的肿块会因此被量偏。他们期待三维数据把整块标本里的病灶都纳入检测、结构和定量，并最终改善病人的处理。更大样本和临床试验还没有证明三维病理已经提高了诊断准确度或预后判断。这项工作先在小鼠肺的连续切片上把真实层距的体积做出来，作为这条路上的一块测量，还不是临床诊断。</p>
 <p class="when">Yoshikawa 等，Cancer Science，2024，<a href="https://doi.org/10.1111/cas.16095">10.1111/cas.16095</a>。Kiemen 与 Wood，Annual Review of Cancer Biology，2026，<a href="https://doi.org/10.1146/annurev-cancerbio-070924-011950">10.1146/annurev-cancerbio-070924-011950</a>。</p>
 <h3>原理</h3>
-<div class="flow"><div class="flow-scroll"><div class="flow-row moving n5" aria-label="CODA 从切片到标签体积的五步">
-<article class="col"><header><span class="n">1</span><span class="t">组织掩膜</span></header><div class="icon" aria-hidden="true"></div><ul><li>每张切片</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">配准</span></header><div class="icon" aria-hidden="true"></div><ul><li>相邻切片</li><li>仿射加弹性</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">训练</span></header><div class="icon" aria-hidden="true"></div><ul><li>DeepLabv3+</li><li>ResNet-50</li><li>5 张有标注</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">标全</span></header><div class="icon" aria-hidden="true"></div><ul><li>150 张</li></ul></article>
-<article class="col"><header><span class="n">5</span><span class="t">堆成体积</span></header><div class="icon" aria-hidden="true"></div><ul><li>配准场套到分类图</li><li>按真实层距</li><li>发射吸收光线行进</li><li>颜色是分类器自己的调色板</li></ul></article>
-</div></div></div>
+<p>用的是 CODA 的原流程。每张切片先做组织掩膜，相邻切片之间做仿射加弹性配准。DeepLabv3+、ResNet-50 在 5 张有标注的切片上训练，再标完全部 150 张。配准场放大后套到分类图上，按真实层距堆成标签体积。渲染用发射和吸收的光线行进，颜色是分类器自己的调色板。</p>
 <h3>当前结果</h3>
-<div class="flow"><div class="flow-scroll"><div class="flow-row n4" aria-label="小鼠肺体积的测量">
-<article class="col"><header><span class="n">1</span><span class="t">切片</span></header><div class="icon" aria-hidden="true"></div><ul><li>150 张</li><li>每张 10 µm</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">网格</span></header><div class="icon" aria-hidden="true"></div><ul><li>2983 × 2497 × 150</li><li>1,117,282,650 体素</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">物理尺寸</span></header><div class="icon" aria-hidden="true"></div><ul><li>11.93 × 9.99 × 1.50 mm</li><li>0.179 cm³</li><li>约整肺的 13.8%</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">分类体积</span></header><div class="icon" aria-hidden="true"></div><ul><li>体素 4 × 4 × 10 µm</li><li>肺泡占组织的大头</li><li>血管 0.228 mm³</li><li>细支气管 0.334 mm³</li><li>标成癌 0.023 mm³</li><li>验证损失 0.02596</li></ul></article>
-</div></div></div>
-<p class="rail">这是 1.5 mm 厚的组织块。小鼠肺大约长 10 到 20 mm，所以不是整只肺的外形。发光把血管和气道画粗了。旋转视频是这同一个体积。人体解剖肺和程序生成的肺叶没有放进这个体积。</p>
+<p>小鼠肺数据集 150 张、每张 10 µm。体积网格 2983 × 2497 × 150，共 1,117,282,650 个体素。物理尺寸 11.93 × 9.99 × 1.50 mm，体积 0.179 cm³，大约是一整个小鼠肺的 13.8%。体素是 4 × 4 × 10 µm。七类里肺泡占组织的大头，血管 0.228 mm³，细支气管 0.334 mm³，分类器标成癌的体素只有 0.023 mm³。验证损失 0.02596。页面上的旋转视频是这同一个体积。</p>
+<p>这是 1.5 mm 厚的组织块。小鼠肺大约长 10 到 20 mm，所以画面上是一块带支气管血管树的组织，还不是整个肺的外形。血管和气道在图里显得比数据粗，因为渲染的发光把一两体素厚的结构加宽了。人体解剖肺模型和程序生成的小鼠肺叶没有放进这个体积。</p>
 <h3>期待目标</h3>
-<div class="flow"><div class="flow-scroll"><div class="flow-row moving n4" aria-label="从切面上分开的区域到三维连通">
-<article class="col"><header><span class="n">1</span><span class="t">切面上分开</span></header><div class="icon" aria-hidden="true"></div><ul><li>上皮区看起来是两块</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">沿厚度接上</span></header><div class="icon" aria-hidden="true"></div><ul><li>HT704B1</li><li>切面相距超过 5 mm</li><li>约 200 µm 层叠里连上</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">光片里是一棵树</span></header><div class="icon" aria-hidden="true"></div><ul><li>看似散开的浸润癌</li><li>原位癌嵌在树里</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">肺癌还没画</span></header><div class="icon" aria-hidden="true"></div><ul><li>先二维分开</li><li>再查第三维是否相通</li></ul></article>
-</div></div></div>
+<p>Storrs 等人在乳腺和前列腺里看到：一张切面上分开的上皮区，沿切片厚度连成同一块。乳腺样本 HT704B1 上，切面距离超过 5 mm 的两块上皮，在大约 200 µm 的层叠里接上；光片成像里，看似散开的浸润癌在三维里是一棵连通的树，原位癌或高级别上皮内瘤变嵌在这棵树里，或正在变成浸润癌。肺癌这边要做的是同一件事：先在二维上把区域分开，再检查这些区域在第三维是否相通，并画出连通的那一块。</p>
 <p class="when">Storrs 等，Cancer Discovery，2026，<a href="https://aacrjournals.org/cancerdiscovery/article/16/9/1819/787684/Spatial-Mapping-of-the-Precancer-to-Cancer">Spatial Mapping of the Precancer-to-Cancer Transition in Breast and Prostate</a>。</p>
 <svg class="schematic" viewBox="0 0 820 250" role="img" aria-label="左图一张切面上两块分开的区域，右图沿厚度叠起来后连成一块。">
   <title>二维分开，三维相通</title>
@@ -210,40 +159,19 @@
 <section id="evolution">
 <h2>2D 切片演化</h2>
 <h3>目的</h3>
-<div class="flow"><div class="flow-scroll"><div class="flow-row moving n4" aria-label="从留不下位置的测序到相邻区域的状态">
-<article class="col"><header><span class="n">1</span><span class="t">留不下位置</span></header><div class="icon" aria-hidden="true"></div><ul><li>批量测序</li><li>打散的单细胞</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">肿瘤微区</span></header><div class="icon" aria-hidden="true"></div><ul><li>被间质隔开的癌细胞团</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">空间亚克隆</span></header><div class="icon" aria-hidden="true"></div><ul><li>同一套遗传改变</li><li>中心和边缘的代谢、抗原呈递</li><li>T 细胞、巨噬细胞的位置</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">我们接到的一层</span></header><div class="icon" aria-hidden="true"></div><ul><li>相邻区域的组成和表达</li><li>还没有突变或拷贝数</li><li>不能据此选药</li></ul></article>
-</div></div></div>
-<p class="rail">Mo 等人看到原发和转移的生长方式分开，三维亚克隆周围免疫耗竭升高，热区和冷区并存。他们的材料是六个癌种的 Visium。这里接到的是位置上相邻的状态怎么变。</p>
+<p>生物学上，Mo 等人 2024 年在 Nature 里把要解决的问题写成：治疗抵抗的亚克隆怎么在空间里出现，肿瘤微环境又怎么推动抵抗。批量测序和把组织打散的单细胞测序都留不下位置。他们用空间转录组把被间质隔开的癌细胞团定义成肿瘤微区，再把带有同一套遗传改变的微区收成空间亚克隆，看亚克隆中心和边缘的代谢、抗原呈递，以及 T 细胞、巨噬细胞待在什么地方。</p>
+<p>临床上，同一篇工作把原发和转移的生长方式分开，并在三维亚克隆周围看到免疫耗竭标志升高、免疫热区和冷区并存。这些局部结构被认为和治疗抵抗有关。他们自己的材料是六个癌种的 Visium，不是肺的 Xenium。这里的切片演化接到的是其中“位置上的组织状态如何相连”这一层：在一张切片里，从分化上皮出发，看相邻区域的细胞组成和表达怎么变。它还没有亚克隆的突变或拷贝数，也不能直接告诉一位病人该用哪种药。</p>
 <p class="when">Mo 等，Nature，2024，<a href="https://doi.org/10.1038/s41586-024-08087-4">10.1038/s41586-024-08087-4</a>。</p>
 <h3>原理</h3>
-<div class="flow"><div class="flow-scroll"><div class="flow-row moving n4" aria-label="从小窗特征到每张切片自己的树">
-<article class="col"><header><span class="n">1</span><span class="t">小窗</span></header><div class="icon" aria-hidden="true"></div><ul><li>三张人肺 Xenium</li><li>400 µm，至少 30 个细胞</li><li>共 785 个</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">特征</span></header><div class="icon" aria-hidden="true"></div><ul><li>细胞类型比例</li><li>153 个基因的 16 个主成分</li><li>配准 H&amp;E 的颜色和纹理</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">收成模式</span></header><div class="icon" aria-hidden="true"></div><ul><li>高斯混合，按 BIC</li><li>8 个模式</li><li>相邻同模式 83.6%</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">每张一张树</span></header><div class="icon" aria-hidden="true"></div><ul><li>只走同一张切片上相邻的窗</li><li>根是分化上皮最高的窗</li><li>种子 42</li></ul></article>
-</div></div></div>
-<p class="rail">对应 Pham 等人 2023 年的 pseudo-time-space。没有剪接计数，所以没有 RNA velocity。三个供体没有接成一条轨迹。</p>
+<p>下面这棵树用的是三张人肺 Xenium。小窗边长 400 µm、至少 30 个细胞，共 785 个。特征是细胞类型比例、153 个共有基因的 16 个主成分，以及配准 H&amp;E 的颜色和纹理。细簇再用高斯混合按 BIC 收成 8 个模式。相邻小窗同模式的比例是 83.6%。种子是 42。</p>
+<p>进化关系按切片分开做。一步只能走在同一张切片上边相邻的小窗之间，代价是上面那份特征的距离。根是这张切片上分化上皮比例最高的小窗。做法对应 Pham 等人 2023 年的 pseudo-time-space。没有剪接和未剪接计数，所以没有 RNA velocity。三个供体没有接成一条轨迹。</p>
 <h3>当前结果</h3>
-<div class="flow"><div class="flow-scroll"><div class="flow-row moving n3" aria-label="三张切片各自的树">
-<article class="col"><header><span class="n">1</span><span class="t">5k<small>P7 → P4</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>上皮 0.47 → 0.21</li><li>内皮 0.06 → 0.34</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">lc<small>P5 → P1</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>上皮 0.27 → 0.48</li><li>内皮 0.43 → 0.07</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">luad<small>P7 → P2 → P8</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>上皮 0.53、0.59 → 0.11</li><li>到 P8 内皮 0.41</li></ul></article>
-</div></div></div>
-<p class="rail">箭头画在配准后的 H&amp;E 上。t-SNE 和 UMAP 里的灰线和红线是这棵空间树。视频约 8 秒，后面的肺是 BodyParts3D 外形。P2 上皮 z +1.38、增殖 −0.10。P3 增殖 +2.59、基质 +1.32、CXCL9 +2.01，主要来自 lc。面板里没有 ISG15、IFI27、IFIT3、HLA-DRA，所以没有患者级 archetype，也没有跨患者 ecotype。</p>
-<div class="flow"><div class="flow-scroll"><div class="flow-row n3" aria-label="后来的拟合和现在的公开页面">
-<article class="col"><header><span class="n">1</span><span class="t">11 张拟合</span></header><div class="icon" aria-hidden="true"></div><ul><li>1,329,253 个细胞</li><li>1,875 个窗口，68 个基因</li><li>没有 H&amp;E，细簇 44，8 个模式</li><li>相邻同模式 83.4%</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">按平台分开</span></header><div class="icon" aria-hidden="true"></div><ul><li>三张切片各自收成一个模式</li><li>没有当成公开结果</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">公开页面</span></header><div class="icon" aria-hidden="true"></div><ul><li>17 张 Takano</li><li>800 µm，4 个模式</li><li>还是一次静态划分</li></ul></article>
-</div></div></div>
+<p>5k 的视频枝是 P7 → P4，上皮比例 0.47 到 0.21，内皮 0.06 到 0.34。lc 是 P5 → P1，上皮 0.27 到 0.48，内皮 0.43 到 0.07。luad 是 P7 → P2 → P8，上皮 0.53、0.59 再到 0.11，到 P8 时内皮 0.41。转移箭头画在配准后的 H&amp;E 上。t-SNE 和 UMAP 里，灰线和红线是这棵空间树，线表示切片上相邻。</p>
+<p>表达程序可以叠在同一个模式上。P2 上皮 z 分数 +1.38，增殖 −0.10。P3 的增殖 +2.59、基质 +1.32、CXCL9 +2.01 同时高，分数主要来自 lc。面板里没有 ISG15、IFI27、IFIT3、HLA-DRA，所以没有做患者级 archetype，也没有做跨患者 ecotype。</p>
+<p>演化视频约 8 秒。玻璃盒后面的肺是 BodyParts3D 的成人解剖模型，只作外形，不是这三张切片重建出来的。</p>
+<p>2026-11-24 另有一次拟合，把队列加到 11 张切片，留下 1,329,253 个细胞、1,875 个窗口。共有基因降到 68 个，特征里没有 H&amp;E，细簇 44 个，仍收成 8 个模式，相邻小窗同模式的比例是 83.4%。这次模式按平台分开。Annotile 公开页面现在是 17 张 Takano、800 µm、4 个模式。上面三张切片的树留在记录里，三个供体没有接成一条轨迹。</p>
 <h3>期待目标</h3>
-<div class="flow"><div class="flow-scroll"><div class="flow-row moving n3" aria-label="用模式之间的相邻代替采不到的时间点">
-<article class="col"><header><span class="n">1</span><span class="t">采不到</span></header><div class="icon" aria-hidden="true"></div><ul><li>同一块肿瘤的多个时间点</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">用相邻代替</span></header><div class="icon" aria-hidden="true"></div><ul><li>从一个模式走到相邻的另一个</li><li>组成变化代替时间</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">还没画成过程</span></header><div class="icon" aria-hidden="true"></div><ul><li>三张切片的树只是内部相邻</li><li>17 张的 4 个模式仍是静态划分</li></ul></article>
-</div></div></div>
+<p>同一块肿瘤很少能在几个真实时间点上被反复取到。下一步把已经分出的潜在模式连成进化关系，画成一个动态过程：从一个模式走到相邻的另一个模式，用空间上的相邻和细胞组成的变化代替缺失的时间序列。三张切片上已有的树只说明每张切片内部相邻，还不是这个动态过程。17 张、800 µm 的 4 个模式也还是一次静态划分。</p>
 <svg class="schematic" viewBox="0 0 820 210" role="img" aria-label="潜在模式沿一条路径变化，用来代替采不到的多个时间点。">
   <title>用空间上的模式变化代替时间序列</title>
   <text x="16" y="28" font-size="16" font-weight="700" fill="#1c1917">采不到的时间</text>
@@ -276,35 +204,17 @@
 <section id="virtual">
 <h2>虚拟细胞</h2>
 <h3>目的</h3>
-<div class="flow"><div class="flow-scroll"><div class="flow-row n4" aria-label="虚拟细胞要做什么，以及这项工作还没做到">
-<article class="col"><header><span class="n">1</span><span class="t">从数据里学</span></header><div class="icon" aria-hidden="true"></div><ul><li>分子、细胞、组织</li><li>不同条件、不同扰动</li><li>现有模型还模拟不了状态怎么变</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">要有的能力</span></header><div class="icon" aria-hidden="true"></div><ul><li>跨尺度的通用表示</li><li>可以解释的计算机实验</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">临床用途</span></header><div class="icon" aria-hidden="true"></div><ul><li>新的药物靶点</li><li>预测扰动后的反应</li><li>追疾病的原因</li><li>把搜索扩到做不完的实验之外</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">还没做到</span></header><div class="icon" aria-hidden="true"></div><ul><li>评价、数据、可解释性都还没齐</li><li>Tahoe 是语料，小模型只看结构</li><li>没有新靶点，没有进入临床</li></ul></article>
-</div></div></div>
+<p>生物学上，Bunne 等人 2024 年在 Cell 的展望里把细胞写成理解健康和疾病的基本单位。现有模型还模拟不了细胞在不同状态下的行为和功能。他们提出的人工智能虚拟细胞，是直接从多尺度生物数据里学出来的模拟：分子、细胞和组织在不同条件、不同扰动下怎么变。要它具备的能力包括跨尺度的通用表示，以及可以解释的计算机实验。</p>
+<p>临床上，同一篇展望把用途写成三件：找出新的药物靶点，预测细胞对扰动的反应，以及把假设的搜索扩大到做不完的实验之外。准确的细胞模型也被他们用来追疾病的原因。他们同时把评价标准、数据需求和可解释性列为还没完成的条件。这项工作里，Tahoe 是为这种大规模模拟准备的扰动细胞语料；浏览器里的小模型只用来看知识 token 这种结构怎么工作。两者都还没有识别出新靶点，也没有进入临床决策。</p>
 <p class="when">Bunne 等，Cell，2024，<a href="https://doi.org/10.1016/j.cell.2024.11.015">10.1016/j.cell.2024.11.015</a>。</p>
 <h3>原理</h3>
-<div class="flow"><div class="flow-scroll"><div class="flow-row moving n4" aria-label="从语料到三头效应模型">
-<article class="col"><header><span class="n">1</span><span class="t">观察细胞</span></header><div class="icon" aria-hidden="true"></div><ul><li>先学细胞状态</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">扰动细胞</span></header><div class="icon" aria-hidden="true"></div><ul><li>再学状态怎么转移</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">语料已就绪</span></header><div class="icon" aria-hidden="true"></div><ul><li>Tahoe 3388 个分片</li><li>Orion 332 个分片</li><li>都已转成 h5</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">效应模型</span></header><div class="icon" aria-hidden="true"></div><ul><li>强度、方向、幅度</li><li>种子 42，GPU 0</li><li>K562 和 RPE1 留出</li></ul></article>
-</div></div></div>
-<p class="rail">细胞系特异的表观残差等这一阶段稳定后再接。浏览器里的实验站是 16 个基因的合成表，按细胞周期、TP53、mTOR、KRAS/MAPK 和干扰素书写，用来看知识 token 怎么读 STRING 和 DepMap。那不是 Tahoe，也不是这次效应模型的成绩。</p>
+<p>大规模路线跟着虚拟细胞基座的想法：先在大量观察细胞上学细胞状态，再在扰动过的细胞上学转移。Tahoe-100M 的 3388 个训练分片和 Orion 的 332 个分片都已转成 h5。正在跑的是效应模型，对每个扰动预测强度、方向和幅度。种子是 42，用 GPU 0。K562 和 RPE1 留出。细胞系特异的表观残差等这一阶段稳定后再接。</p>
+<p>浏览器里的实验站是另一件小得多的东西。它按 Arc 公开的 PIE 结构，把知识做成 token，在 16 个基因、若干细胞系和扰动的合成汇总表上训练一个能看懂的小模型。那张表的数字按细胞周期、TP53、mTOR、KRAS/MAPK 和干扰素几条通路书写，不是 Replogle 的原始计数，也不是 Tahoe。</p>
 <h3>当前结果</h3>
-<div class="flow"><div class="flow-scroll"><div class="flow-row n4" aria-label="2026-11-24 17:14 的效应模型进度">
-<article class="col"><header><span class="n">1</span><span class="t">步数</span></header><div class="icon" aria-hidden="true"></div><ul><li>第 6300 步</li><li>约 2217 万个细胞</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">这一步损失</span></header><div class="icon" aria-hidden="true"></div><ul><li>训练 1.1332</li><li>验证 1.5587</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">留出</span></header><div class="icon" aria-hidden="true"></div><ul><li>留出细胞数是 0</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">还不是结果</span></header><div class="icon" aria-hidden="true"></div><ul><li>没有跟 STATE 比</li><li>实验站的曲线不能当成绩</li></ul></article>
-</div></div></div>
+<p>2026-11-24 17:14，效应模型训到第 <span class="num">6300</span> 步，读过约 <span class="num">2217</span> 万个细胞。这一步训练损失 1.1332，验证损失 1.5587。留出细胞数是 0。还没有用 Cell-Eval 或 cell-eval2 跟 STATE 比，这组损失还不是结果。</p>
+<p>实验站可以在本地改学习率、步数和知识源开关，立刻看到预测曲线变。它说明 PIE 这一类结构怎么读 STRING 和 DepMap，不能当作这次效应模型的成绩。</p>
 <h3>期待目标</h3>
-<div class="flow"><div class="flow-scroll"><div class="flow-row moving n4" aria-label="效应模型之后要做的四步">
-<article class="col"><header><span class="n">1</span><span class="t">训稳</span></header><div class="icon" aria-hidden="true"></div><ul><li>这一阶段先跑完</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">参考转移</span></header><div class="icon" aria-hidden="true"></div><ul><li>加上细胞系特异的表观残差</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">再跟 STATE 比</span></header><div class="icon" aria-hidden="true"></div><ul><li>Cell-Eval、cell-eval2</li><li>比完之前不写超过</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">外部标准</span></header><div class="icon" aria-hidden="true"></div><ul><li>2026 年挑战赛前三名</li><li>奖金一半现金、一半额度</li></ul></article>
-</div></div></div>
+<p>这一阶段训稳之后，再做参考转移和细胞系特异的表观残差，并用 Cell-Eval、cell-eval2 跟 STATE 比。比完之前不把训练损失写成超过 STATE。要对齐的外部标准是 2026 年虚拟细胞挑战赛的前三名。下图是官方公布的奖金，每一名都是一半现金、一半 NVIDIA Brev 额度。</p>
 <svg class="schematic" viewBox="0 0 820 250" role="img" aria-label="2026 年虚拟细胞挑战赛前三名奖金：10 万美元、5 万美元、2.5 万美元">
   <title>2026 年虚拟细胞挑战赛前三名奖金</title>
   <text x="16" y="28" font-size="16" font-weight="700" fill="#1c1917">2026 年前三名</text>
@@ -324,29 +234,17 @@
 <section id="morphgate">
 <h2>H&amp;E 预测空转</h2>
 <h3>目的</h3>
-<div class="flow"><div class="flow-scroll"><div class="flow-row moving n4" aria-label="从染色切片到空间表达，以及还没做的临床检验">
-<article class="col"><header><span class="n">1</span><span class="t">空间表达</span></header><div class="icon" aria-hidden="true"></div><ul><li>组织坐标上谁在表达什么</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">用染色去预测</span></header><div class="icon" aria-hidden="true"></div><ul><li>成对的苏木精伊红</li><li>医院里大量存档的是染色切片</li><li>常规切片带上空间分子</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">下游两件</span></header><div class="icon" aria-hidden="true"></div><ul><li>区分生存风险</li><li>认出已有名称的区域</li><li>TCGA 上生存区分仍然有限</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">我们现在比的</span></header><div class="icon" aria-hidden="true"></div><ul><li>预测有多接近实测</li><li>生存和跨研究还没有做</li></ul></article>
-</div></div></div>
+<p>生物学上，Wang 等人 2025 年的基准把空间基因表达写成理解疾病分子基础的一层：它给出组织坐标上谁在表达什么。成对的苏木精伊红图像如果能预测这层表达，常规染色切片就能带上空间分子信息。</p>
+<p>临床上，同一篇基准把下游用途写成两件：用预测出的空间表达区分生存风险，以及认出病理上已有名称的区域。他们还把模型拿到 TCGA 的乳腺癌切片上做外部检验，因为医院里大量存档的就是这种染色切片，空间转录组则贵、也覆盖不了旧切片。他们的结论是：这些方法能从染色图像里预测出空间表达，但在没见过的 TCGA 数据上区分生存的能力有限，还没有准备好直接用于临床。这项工作沿他们的划分比较预测有多接近实测表达，生存分析和跨研究检验还没有做。</p>
 <p class="when">Wang 等，Nature Communications，2025，<a href="https://doi.org/10.1038/s41467-025-56618-y">10.1038/s41467-025-56618-y</a>。</p>
 <h3>原理</h3>
-<div class="flow"><div class="flow-scroll"><div class="flow-row moving n4" aria-label="从病人四折到后一轮图像模型">
-<article class="col"><header><span class="n">1</span><span class="t">四折</span></header><div class="icon" aria-hidden="true"></div><ul><li>同一病人的切片不拆开</li><li>两折训练，一折验证，一折测试</li><li>报四个测试折的平均</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">基因</span></header><div class="icon" aria-hidden="true"></div><ul><li>HER2 785，cSCC 997</li><li>高变 30，空间可变 20</li><li>和 scran、SPARK-X 不完全一样</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">文章里的对照</span></header><div class="icon" aria-hidden="true"></div><ul><li>斑点和六个近邻，岭回归</li><li>门控：相关低于 0.10 填均值</li><li>去掉门控则全部回归</li><li>GHIST-spot：6 个程序</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">后一轮</span></header><div class="icon" aria-hidden="true"></div><ul><li>224 像素，冻结的 ImageNet ResNet-18</li><li>按切片居中，64 维主成分，6 近邻</li><li>验证折在岭回归、检索、原型、混合里选</li></ul></article>
-</div></div></div>
-<p class="rail">Fu 等人的深度网络和 Hover-Net 没有重跑。原文的 0.16 单独记，不画成这次的结果。</p>
+<p>协议来自 Wang 等人 Nature Communications 2025 的基准。HER2 阳性乳腺癌和皮肤鳞癌各分四折，同一病人的相邻切片留在同一折。两折训练，一折验证，一折测试。报的是四个测试折的平均。基因是全体切片共有、方差最高的 785 个（HER2）和 997 个（cSCC）。高变基因是其中方差最高的 30 个。空间可变基因按阵列上 6 个近邻的 Moran's I 取 20 个。这和原文的 scran、SPARK-X 名单不完全一样。</p>
+<p>文章里的 MorphGate 用斑点及其六个近邻的染色特征做岭回归。门控会把训练集里相关低于 0.10 的基因填成训练集均值。去掉门控则 785 或 997 个基因都回归。GHIST-spot 只保留组成关系：6 个表达程序，再用染色特征预测程序权重。Fu 等人原文的深度网络和 Hover-Net 细胞核分割没有重跑。原文报告的 0.16 写在表里单独一行。</p>
+<p>文章之后又跑了一轮。斑点切成 224 像素，用冻结的 ImageNet ResNet-18 取 512 维，按切片居中，再做 64 维主成分和 6 近邻平均。验证折在岭回归、近邻检索、原型和混合里选一个。同一套四折和基因定义。</p>
 <h3>当前结果</h3>
-<div class="flow"><div class="flow-scroll"><div class="flow-row n4" aria-label="后一轮四个门槛和更早的对照">
-<article class="col"><header><span class="n">1</span><span class="t">HER2 后一轮</span></header><div class="icon" aria-hidden="true"></div><ul><li>相关 0.0788</li><li>SSIM 0.0447</li><li>高变 0.1267</li><li>空间可变 0.2236</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">cSCC 后一轮</span></header><div class="icon" aria-hidden="true"></div><ul><li>相关 0.1398</li><li>SSIM 0.0768</li><li>高变 0.1435</li><li>空间可变 0.1854</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">更早的对照</span></header><div class="icon" aria-hidden="true"></div><ul><li>去掉门控 HER2 0.071 / 0.045 / 0.072 / 0.141</li><li>GHIST-spot 0.044 / 0.018 / 0.044 / 0.063</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">文献门槛</span></header><div class="icon" aria-hidden="true"></div><ul><li>0.16、0.10、0.20、0.27</li><li>四项都没过，文章没改</li></ul></article>
-</div></div></div>
-<p class="rail">下面是已经核对过文件清单或服务器副本的切片数。棕色是细胞分辨率，蓝色是斑点。</p>
+<p>后一轮 HER2 四个测试折的平均：相关 0.0788，SSIM 0.0447，高变基因相关 0.1267，空间可变基因相关 0.2236。cSCC 上相关 0.1398，SSIM 0.0768，高变基因相关 0.1435，空间可变基因相关 0.1854。四项门槛都没过，文章因此没改。</p>
+<p>文章里仍是更早的对照：去掉门控的 MorphGate，HER2 相关 0.071，SSIM 0.045，高变基因相关 0.072，空间可变基因相关 0.141；GHIST-spot 是 0.044、0.018、0.044、0.063。文献里 GHIST 的 0.16、0.10、0.20、0.27 是原文数字，不是这两次重算。</p>
+<p>下面是已经核对过文件清单或服务器副本的切片数。棕色是细胞分辨率，蓝色是斑点。</p>
 <svg class="schematic" viewBox="0 0 820 300" role="img" aria-label="已核对的各癌种空间转录组切片数">
   <title>已核对的各癌种空间转录组切片数</title>
   <text x="16" y="26" font-size="16" font-weight="700" fill="#1c1917">各癌种已核对的切片数</text>
@@ -367,12 +265,7 @@
 </svg>
 <p class="when">肺腺癌两行是 Takano。HER2ST 是 Andersson，36 张、8 个供体。皮肤鳞癌四折是 P2、P5、P9、P10，各 3 张。两行 Xenium 是 GSE311609 的文件清单，22 张肺来自 10 个供者，19 张乳腺来自 17 个供者。直肠癌 SPATNIC 的 52 例没有公开入口，没有画进这张图。</p>
 <h3>期待目标</h3>
-<div class="flow"><div class="flow-scroll"><div class="flow-row n4" aria-label="四项门槛，现在都还没过">
-<article class="col"><header><span class="n">1</span><span class="t">相关<small>门槛 0.16</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>现在 0.0788</li></ul></article>
-<article class="col"><header><span class="n">2</span><span class="t">SSIM<small>门槛 0.10</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>现在 0.0447</li></ul></article>
-<article class="col"><header><span class="n">3</span><span class="t">高变基因<small>门槛 0.20</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>现在 0.1267</li></ul></article>
-<article class="col"><header><span class="n">4</span><span class="t">空间可变<small>门槛 0.27</small></span></header><div class="icon" aria-hidden="true"></div><ul><li>现在 0.2236</li><li>四项都过了再改文章</li></ul></article>
-</div></div></div>
+<p>在我们自己的这套定义上，HER2 四折平均同时超过相关 0.16、SSIM 0.10、高变基因相关 0.20、空间可变基因相关 0.27。四项都过了再改文章。没过之前，文章保持现在的对照，不把文献里的 0.16 画成这次重算的结果。</p>
 </section>
 </main>
 </body>
