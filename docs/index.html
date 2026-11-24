@@ -68,7 +68,7 @@
 <tbody>
 <tr><td>3D 重构</td><td>小鼠肺 150 张连续切片，1.5 mm 组织块，11.7 亿体素</td><td><a href="https://kainblue100.github.io/coda-mouse-lung-volume/">体积页面</a></td></tr>
 <tr><td>2D 切片演化</td><td>公开页面是 17 张 Takano、800 µm、4 个模式。模式之间还没有画成随时间变化的过程</td><td><a href="https://kainblue100.github.io/annotile/">Annotile</a></td></tr>
-<tr><td>虚拟细胞</td><td>Tahoe 3388 与 Orion 332 个分片已就绪。三头效应模型训到第 6300 步，还没有跟 STATE 比</td><td>数据在服务器上，页面还没有</td></tr>
+<tr><td>虚拟细胞</td><td>效应模型从第 19281 步接着训。另一张 GPU 上的 Epi-GRN 加到 1024 维、10 万步，cell-eval 出来之前不跟 STATE 比输赢</td><td>数据在服务器上，页面还没有</td></tr>
 <tr><td>H&amp;E 预测空转</td><td>HER2 四折平均相关 0.0788、SSIM 0.0447、高变基因 0.1267、空间可变基因 0.2236，四项门槛都未过</td><td><a href="https://github.com/kainblue100/morphgate/blob/main/docs/article.md">MorphGate 文章</a></td></tr>
 </tbody>
 </table>
@@ -283,10 +283,54 @@
 <p>临床上，同一篇展望把用途写成三件：找出新的药物靶点，预测细胞对扰动的反应，以及把假设的搜索扩大到做不完的实验之外。准确的细胞模型也被他们用来追疾病的原因。他们同时把评价标准、数据需求和可解释性列为还没完成的条件。这项工作里，Tahoe 是为这种大规模模拟准备的扰动细胞语料；浏览器里的小模型只用来看知识 token 这种结构怎么工作。两者都还没有识别出新靶点，也没有进入临床决策。</p>
 <p class="when">Bunne 等，Cell，2024，<a href="https://doi.org/10.1016/j.cell.2024.11.015">10.1016/j.cell.2024.11.015</a>。</p>
 <h3>原理</h3>
-<p>大规模路线跟着虚拟细胞基座的想法：先在大量观察细胞上学细胞状态，再在扰动过的细胞上学转移。Tahoe-100M 的 3388 个训练分片和 Orion 的 332 个分片都已转成 h5。正在跑的是效应模型，对每个扰动预测强度、方向和幅度。种子是 42，用 GPU 0。K562 和 RPE1 留出。细胞系特异的表观残差等这一阶段稳定后再接。</p>
+<p>大规模路线跟着虚拟细胞基座的想法：先在大量观察细胞上学细胞状态，再在扰动过的细胞上学转移。Tahoe-100M 的 3388 个训练分片和 Orion 的 332 个分片都已转成 h5。正在跑的是效应模型，对每个扰动预测强度、方向和幅度。种子是 42。K562 和 RPE1 留出。能跟 STATE 放在同一套 cell-eval 上比的，是下面这套集合到集合骨架；Tahoe 上的三头读出还没有接上图里的先验。</p>
+<svg class="schematic" viewBox="0 0 820 292" role="img" aria-label="对照细胞集合经过编码器和集合 Transformer，先验从被敲基因和逐基因读出两处接入">
+  <title>和 Epi-Duo 同一套集合到集合骨架</title>
+  <defs>
+    <marker id="toBlue" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#1d4e73"/></marker>
+    <marker id="toRed" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0 0 L7 3 L0 6 Z" fill="#9a3412"/></marker>
+  </defs>
+  <rect x="16" y="18" width="148" height="50" fill="#f5e6d3" stroke="#d6d3d1"/>
+  <text x="90" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1c1917">对照细胞集合</text>
+  <text x="90" y="56" text-anchor="middle" font-size="11" fill="#57534e">S × 2000 基因</text>
+  <path d="M164 43 H198" stroke="#1d4e73" stroke-width="1.6" marker-end="url(#toBlue)"/>
+  <rect x="206" y="18" width="140" height="50" fill="#f5e6d3" stroke="#d6d3d1"/>
+  <text x="276" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1c1917">基础编码器</text>
+  <text x="276" y="56" text-anchor="middle" font-size="11" fill="#57534e">MLP</text>
+  <path d="M346 43 H380" stroke="#1d4e73" stroke-width="1.6" marker-end="url(#toBlue)"/>
+  <rect x="388" y="18" width="168" height="50" fill="#f5e6d3" stroke="#d6d3d1"/>
+  <text x="472" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1c1917">集合 Transformer</text>
+  <text x="472" y="56" text-anchor="middle" font-size="11" fill="#57534e">细胞之间互相注意</text>
+  <path d="M556 43 H590" stroke="#1d4e73" stroke-width="1.6" marker-end="url(#toBlue)"/>
+  <rect x="598" y="18" width="200" height="50" fill="#f5e6d3" stroke="#d6d3d1"/>
+  <text x="698" y="40" text-anchor="middle" font-size="13" font-weight="700" fill="#1c1917">预测的扰动集合</text>
+  <text x="698" y="56" text-anchor="middle" font-size="11" fill="#57534e">对照 + Δ</text>
+  <rect x="16" y="100" width="148" height="44" fill="#ffffff" stroke="#1d4e73"/>
+  <text x="90" y="120" text-anchor="middle" font-size="13" font-weight="700" fill="#1c1917">扰动标签</text>
+  <text x="90" y="136" text-anchor="middle" font-size="11" fill="#57534e">嵌入，不知道基因是谁</text>
+  <path d="M164 122 C240 122, 300 90, 388 50" fill="none" stroke="#1d4e73" stroke-width="1.6" marker-end="url(#toBlue)"/>
+  <rect x="16" y="176" width="168" height="50" fill="#ffffff" stroke="#9a3412"/>
+  <text x="100" y="198" text-anchor="middle" font-size="13" font-weight="700" fill="#9a3412">先验</text>
+  <text x="100" y="214" text-anchor="middle" font-size="11" fill="#57534e">候选网络，或顺式元件</text>
+  <path d="M184 201 H218" stroke="#9a3412" stroke-width="1.6" marker-end="url(#toRed)"/>
+  <rect x="226" y="176" width="168" height="50" fill="#ffffff" stroke="#9a3412"/>
+  <text x="310" y="198" text-anchor="middle" font-size="13" font-weight="700" fill="#9a3412">每个基因一个 z</text>
+  <text x="310" y="214" text-anchor="middle" font-size="11" fill="#57534e">消息传递，或注意力池化</text>
+  <path d="M310 176 C310 150, 430 120, 430 68" fill="none" stroke="#9a3412" stroke-width="1.6" marker-end="url(#toRed)"/>
+  <text x="360" y="128" font-size="12" fill="#9a3412">① 被敲基因</text>
+  <path d="M394 201 H430" stroke="#9a3412" stroke-width="1.6" marker-end="url(#toRed)"/>
+  <rect x="438" y="176" width="360" height="50" fill="#ffffff" stroke="#9a3412"/>
+  <text x="618" y="198" text-anchor="middle" font-size="13" font-weight="700" fill="#9a3412">② 逐基因读出</text>
+  <text x="618" y="214" text-anchor="middle" font-size="11" fill="#57534e">q(h) · k(z) / √d ，加进 Δ</text>
+  <path d="M698 176 V76" stroke="#9a3412" stroke-width="1.6" marker-end="url(#toRed)"/>
+  <text x="16" y="258" font-size="13" fill="#57534e">先验的线性层从零开始。第 0 步时，带先验的模型和没有先验的骨架输出相同。</text>
+  <text x="16" y="278" font-size="13" fill="#57534e">Tahoe 效应模型走另一条读出：强度、方向、幅度。这张图里的先验还没有接进那次训练。</text>
+</svg>
+<p class="rail">结构与 <a href="https://kainblue100.github.io/Epi-Duo/">Epi-Duo</a> 的共同骨架相同。模型 A 把表观证据收成边再做消息传递，模型 B 把每个基因最多 24 个顺式元件池化成一个向量。两条先验都从被敲基因和每个输出基因这两处进骨架。</p>
 <p>浏览器里的实验站是另一件小得多的东西。它按 Arc 公开的 PIE 结构，把知识做成 token，在 16 个基因、若干细胞系和扰动的合成汇总表上训练一个能看懂的小模型。那张表的数字按细胞周期、TP53、mTOR、KRAS/MAPK 和干扰素几条通路书写，不是 Replogle 的原始计数，也不是 Tahoe。</p>
 <h3>当前结果</h3>
-<p>2026-11-24 17:14，效应模型训到第 <span class="num">6300</span> 步，读过约 <span class="num">2217</span> 万个细胞。这一步训练损失 1.1332，验证损失 1.5587。留出细胞数是 0。还没有用 Cell-Eval 或 cell-eval2 跟 STATE 比，这组损失还不是结果。</p>
+<p>2026-11-24 22:15，效应模型从第 <span class="num">19281</span> 步接着训，此前读过约 <span class="num">6733</span> 万个细胞。这一轮批大小 32，每个分片最多 400 个批次，显存额度设到这张卡的 85%。留出细胞数仍是 0。这组损失还不是跟 STATE 的比较。</p>
+<p>另一张空着的 GPU 在训更大的 Epi-GRN：隐藏维 1024、8 层、约 1.12 亿参数、批大小 64、10 万步、种子 42，先留出 K562，再留出 RPE1，跑完用同一套 cell-eval 跟官方 STATE-sm 比。已经公布的 2 万步、种子 42 结果里，K562 留出的 pearson_delta 是 Epi-GRN 0.256、STATE 0.064，context_mean 是 0.271。这一轮的表还没有出来，所以不写成超过 STATE。</p>
 <p>实验站可以在本地改学习率、步数和知识源开关，立刻看到预测曲线变。它说明 PIE 这一类结构怎么读 STRING 和 DepMap，不能当作这次效应模型的成绩。</p>
 <h3>期待目标</h3>
 <p>这一阶段训稳之后，再做参考转移和细胞系特异的表观残差，并用 Cell-Eval、cell-eval2 跟 STATE 比。比完之前不把训练损失写成超过 STATE。要对齐的外部标准是 2026 年虚拟细胞挑战赛的前三名。下图是官方公布的奖金，每一名都是一半现金、一半 NVIDIA Brev 额度。</p>
