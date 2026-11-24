@@ -7,7 +7,7 @@
 <style>
   :root { color-scheme: light; }
   body { margin: 0; background: #f4f1ea; color: #1c1917; font: 17px/1.65 "Source Han Sans SC", "Noto Sans SC", "Microsoft YaHei", sans-serif; }
-  main { max-width: 1080px; margin: 0 auto; padding: 48px 22px 88px; }
+  main { max-width: 1180px; margin: 0 auto; padding: 48px 22px 88px; }
   h1 { font-size: 36px; line-height: 1.2; margin: 0 0 10px; }
   h2 { font-size: 26px; margin: 48px 0 8px; }
   h3 { font-size: 15px; letter-spacing: 0.04em; margin: 18px 0 4px; color: #9a3412; }
@@ -20,21 +20,32 @@
   th { background: #292524; color: white; font-weight: 600; }
   section { background: white; border: 1px solid #e7e5e4; padding: 8px 26px 22px; margin-top: 22px; }
   .num { font-variant-numeric: tabular-nums; }
-  .twin-grid { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 18px; align-items: start; margin: 14px 0 8px; }
-  .flow { list-style: none; margin: 0; padding: 0 0 0 18px; border-left: 3px solid #9a3412; }
-  .flow li { position: relative; border: 1px solid #e7e5e4; background: #fafaf9; padding: 10px 14px; margin: 0 0 16px; }
-  .flow li:last-child { margin-bottom: 0; }
-  .flow li::before { content: ""; position: absolute; left: -21px; top: 18px; width: 18px; height: 0; border-top: 2px solid #9a3412; }
-  .flow .k { display: block; font-weight: 600; }
-  .flow .d { display: block; font-size: 15px; color: #44403c; }
-  .flow .join { background: white; }
-  .flow .loop { border-color: #9a3412; background: white; }
-  .now { border: 1px solid #e7e5e4; padding: 12px 14px 8px; background: #fafaf9; }
-  .now p { margin: 0 0 8px; font-weight: 600; }
-  .now ul { margin: 0; padding-left: 1.15em; }
-  .now li { margin: 0 0 6px; }
+  .scales { margin: 16px 0 8px; }
+  .scales-top { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px; align-items: center; margin-bottom: 12px; }
+  .scales-top-k { font-weight: 600; font-size: 15px; }
+  .scales-top-bar { border: 1px solid #d6d3d1; background: white; padding: 8px 12px; font-size: 14px; line-height: 1.5; }
+  .scales-body { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px; }
+  .scales-axis { writing-mode: vertical-rl; transform: rotate(180deg); display: grid; place-items: center; font-weight: 600; font-size: 15px; letter-spacing: 0.06em; }
+  .scales-row { --head: 58px; --icon: 78px; position: relative; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+  .scales-row::before { content: ""; position: absolute; z-index: 0; left: 8%; right: 8%; top: calc(12px + var(--head) + 6px + var(--icon) / 2); height: 2px; background: #8eb3cc; }
+  .col { position: relative; z-index: 1; background: #e7f2f8; padding: 12px 8px 10px; min-width: 0; }
+  .col header { height: var(--head); display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 4px; align-items: start; }
+  .col .n { width: 22px; height: 22px; border-radius: 50%; background: #1d4e73; color: white; font-size: 13px; line-height: 22px; text-align: center; font-weight: 600; }
+  .col .t { font-weight: 600; font-size: 15px; line-height: 1.25; }
+  .col .t small { display: block; font-weight: 400; color: #44403c; font-size: 12px; }
+  .col .icon { width: var(--icon); height: var(--icon); margin: 6px auto 8px; border-radius: 50%; background: white; border: 1.5px solid #6e9bb8; display: grid; place-items: center; position: relative; z-index: 1; }
+  .col ul { margin: 0; padding-left: 1.05em; font-size: 13px; line-height: 1.45; }
+  .col li { margin: 0 0 3px; }
+  .col.out { background: #f5f5f4; }
+  .col.out .n { background: #a8a29e; }
+  .col.out .icon { border-style: dashed; border-color: #a8a29e; }
   .rail { margin: 4px 0 0; font-size: 14px; color: #57534e; }
-  @media (max-width: 760px) { .twin-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 800px) {
+    .scales-top, .scales-body { grid-template-columns: 1fr; }
+    .scales-axis { writing-mode: horizontal-tb; transform: none; justify-content: start; margin-bottom: 6px; }
+    .scales-scroll { overflow-x: auto; }
+    .scales-row { min-width: 980px; }
+  }
 </style>
 </head>
 <body>
@@ -55,32 +66,55 @@
 
 <section id="twin">
 <h2>四项怎么连成数字孪生</h2>
-<figure class="twin-grid">
-<ol class="flow" aria-label="从同一块组织走到可更新的数字孪生">
-<li><span class="k">同一块组织</span><span class="d">很多张苏木精伊红切片，加上少数几张实测的空间转录组。后来的切片、影像和疗效也从这里进入。</span></li>
-<li><span class="k">H&amp;E 预测空转</span><span class="d">没做空间转录组的切片补上空间状态。实测的那几张当锚，用来核对预测。</span></li>
-<li><span class="k">3D 重构</span><span class="d">按真实层距配准，得到这块组织的几何：病灶、结构和范围各在什么位置。</span></li>
-<li><span class="k">2D 切片演化</span><span class="d">在这个体积里读相邻状态怎样相连，得到这块组织自己的初始邻域。</span></li>
-<li><span class="k">虚拟细胞</span><span class="d">对每个状态做药物或基因扰动，预测细胞下一步变成什么。</span></li>
-<li class="join"><span class="k">组织尺度的反应</span><span class="d">这些细胞待在测到的邻域里一起变。这一层要等上面四步用上同一块组织之后才出现。</span></li>
-<li class="loop"><span class="k">和后来的测量比较</span><span class="d">新的切片、影像或疗效写回上面每一步。对得上，模型留下；对不上，就改预测和模拟。这一圈更新做起来，才是数字孪生。</span></li>
-</ol>
-<aside class="now">
-<p>现在四项还是分开的标本</p>
-<ul>
-<li>3D：小鼠肺 1.5 mm</li>
-<li>2D：三张不连续的人肺 Xenium</li>
-<li>虚拟细胞：Tahoe 2613 / 3388，基座未训</li>
-<li>H&amp;E：HER2 相关 0.071</li>
-</ul>
-</aside>
+<figure class="scales">
+<div class="scales-top">
+<div class="scales-top-k">用途</div>
+<div class="scales-top-bar">药物靶点 · 扰动后的反应 · 病灶、结构与范围 · 抵抗相关的微环境 · 存档切片上的空间分子 · 随该病人更新</div>
+</div>
+<div class="scales-body">
+<div class="scales-axis">生物学尺度（由内向外套）</div>
+<div class="scales-scroll">
+<div class="scales-row" aria-label="六个生物学尺度，以及四项工作落在哪一层">
+<article class="col">
+<header><span class="n">1</span><span class="t">分子<small>空间上的表达</small></span></header>
+<div class="icon" aria-hidden="true"><svg width="46" height="46" viewBox="0 0 64 64"><g fill="#1d4e73"><rect x="12" y="14" width="10" height="8"/><rect x="27" y="14" width="10" height="8" opacity=".4"/><rect x="42" y="14" width="10" height="8"/><rect x="12" y="28" width="10" height="8" opacity=".4"/><rect x="27" y="28" width="10" height="8"/><rect x="42" y="28" width="10" height="8" opacity=".7"/><rect x="12" y="42" width="10" height="8" opacity=".7"/><rect x="27" y="42" width="10" height="8" opacity=".3"/><rect x="42" y="42" width="10" height="8"/></g></svg></div>
+<ul><li>H&amp;E 预测空转</li><li>斑点上的基因表达</li><li>实测切片当锚</li><li>HER2 相关 0.071</li></ul>
+</article>
+<article class="col">
+<header><span class="n">2</span><span class="t">细胞内<small>状态与扰动</small></span></header>
+<div class="icon" aria-hidden="true"><svg width="46" height="46" viewBox="0 0 64 64"><circle cx="32" cy="32" r="22" fill="none" stroke="#1d4e73" stroke-width="2"/><circle cx="32" cy="34" r="8" fill="#8ebfdb"/><circle cx="18" cy="22" r="2.2" fill="#1d4e73"/><circle cx="46" cy="24" r="2.2" fill="#1d4e73"/><circle cx="44" cy="44" r="2.2" fill="#1d4e73"/></svg></div>
+<ul><li>虚拟细胞</li><li>药物或基因扰动</li><li>Tahoe 语料</li><li>2613 / 3388，基座未训</li></ul>
+</article>
+<article class="col">
+<header><span class="n">3</span><span class="t">细胞之间<small>邻域与微环境</small></span></header>
+<div class="icon" aria-hidden="true"><svg width="46" height="46" viewBox="0 0 64 64"><g fill="none" stroke="#1d4e73" stroke-width="2"><path d="M32 16v10M20 40l8-8M44 40l-8-8M20 40h24"/></g><g fill="#1d4e73"><circle cx="32" cy="14" r="4"/><circle cx="32" cy="30" r="4"/><circle cx="18" cy="44" r="4"/><circle cx="46" cy="44" r="4"/></g></svg></div>
+<ul><li>2D 切片演化</li><li>相邻窗口的细胞组成</li><li>上皮、内皮、基质</li><li>三张切片，8 个模式</li></ul>
+</article>
+<article class="col">
+<header><span class="n">4</span><span class="t">组织 / 器官<small>几何与病理</small></span></header>
+<div class="icon" aria-hidden="true"><svg width="46" height="46" viewBox="0 0 64 64"><g fill="none" stroke="#1d4e73" stroke-width="2"><ellipse cx="32" cy="18" rx="18" ry="6"/><path d="M14 18v14c0 3.3 8 6 18 6s18-2.7 18-6V18"/><path d="M14 28v12c0 3.3 8 6 18 6s18-2.7 18-6V28"/></g></svg></div>
+<ul><li>3D 重构</li><li>真实层距的体积</li><li>病灶、结构、范围</li><li>小鼠肺 1.5 mm</li></ul>
+</article>
+<article class="col">
+<header><span class="n">5</span><span class="t">个体<small>这一位病人</small></span></header>
+<div class="icon" aria-hidden="true"><svg width="46" height="46" viewBox="0 0 64 64"><circle cx="32" cy="16" r="7" fill="#1d4e73"/><path d="M18 52c1.5-13 7-18 14-18s12.5 5 14 18" fill="#1d4e73"/></svg></div>
+<ul><li>数字孪生</li><li>内四层来自同一块组织</li><li>新测量写回各层</li><li>验证后才参与决定</li></ul>
+</article>
+<article class="col out">
+<header><span class="n">6</span><span class="t">人群与病原<small>这四项不到这一层</small></span></header>
+<div class="icon" aria-hidden="true"><svg width="46" height="46" viewBox="0 0 64 64"><circle cx="32" cy="32" r="14" fill="none" stroke="#78716c" stroke-width="2" stroke-dasharray="3 2"/><g fill="#a8a29e"><circle cx="32" cy="10" r="3"/><circle cx="50" cy="24" r="3"/><circle cx="46" cy="46" r="3"/><circle cx="18" cy="46" r="3"/><circle cx="14" cy="24" r="3"/></g></svg></div>
+<ul><li>没有对应项目</li><li>综述里是流行病学、传播和干预</li></ul>
+</article>
+</div>
+</div>
+</div>
 </figure>
-<p class="rail">左侧竖线是更新回路，新测量沿它写回上面每一步。</p>
+<p class="rail">从左到右，尺度一层套一层：分子在细胞内，细胞在邻域里，邻域在组织里，组织在这个病人里。圆之间的线表示这种包含。顶上的用途是综述里写下的目标。第 6 层照 Bunne 等人的图留着，这四项没有放到那一层。测量时的顺序是另一件事：先把切片配准成体积，再在体积里读邻域。</p>
 <p>Tan 等人 2026 年的综述把肿瘤数字孪生写成一架梯子：虚拟细胞，虚拟敲除或过表达，虚拟类器官，虚拟病人。前两级是零件，用来表示细胞、模拟基因扰动。后两级才靠近孪生：类器官把三维的肿瘤微环境建出来，虚拟病人则随这个人的新数据更新，并用来试治疗。他们同时写明工程上的严格定义：虚拟模型和活的对象之间要有持续的双向数据联系。只建一次、或偶尔改一次的，叫做数字影子。</p>
 <p>Kemkar 等人 2024 年引用美国国家科学院的定义，把孪生要模仿的东西收成三件：结构、这个结构所处的环境、以及行为。模型用实物新来的数据更新，预测要能参与决定。他们提出的接法是：细胞尺度的信号模型告诉每个细胞怎么反应，多智能体再把这些细胞放进该病人自己的微环境里，推出组织尺度随时间的变化。用到临床决定之前，还要做验证、确认和不确定性量化。</p>
 <p>四项就按这三件事接。H&amp;E 预测空转负责可扩展的观测：医院里大量存档的是染色切片，空间转录组贵，也覆盖不了旧切片，所以用少数实测切片当锚，把空间状态补到其余切片上。3D 重构负责结构，按真实层距把这些状态配准成一块体积。2D 切片演化负责环境里的空间关系，读出这块体积上哪些状态相邻、轨迹从哪里长出来。虚拟细胞负责行为，给出药物或基因扰动之后细胞状态怎么转移。四步用的是同一块组织时，细胞才能在测到的邻域里一起变，这就是从虚拟细胞走到虚拟类器官的那一层。类器官再被后来的切片、影像和疗效改写，才走到虚拟病人。</p>
 <p>这一圈现在还没有合上。小鼠的 1.5 mm 体积、三张不连续的人肺 Xenium、Tahoe 语料和 HER2 染色切片来自不同标本。换成同一块人肺癌组织上的这四类测量，并且新测量能改回模型之后，才开始是这个病人的数字孪生。验证和不确定性还没有做，所以还不能拿来选药。</p>
-<p class="when">Tan 等，Biomedicines，2026，<a href="https://www.mdpi.com/2227-9059/14/11/2689">14(11):2689</a>。Kemkar 等，Frontiers in Physiology，2024，<a href="https://doi.org/10.3389/fphys.2024.1473125">10.3389/fphys.2024.1473125</a>。</p>
+<p class="when">尺度分法来自 Bunne 等，Cell，2024，<a href="https://doi.org/10.1016/j.cell.2024.11.015">10.1016/j.cell.2024.11.015</a>。Tan 等，Biomedicines，2026，<a href="https://www.mdpi.com/2227-9059/14/11/2689">14(11):2689</a>。Kemkar 等，Frontiers in Physiology，2024，<a href="https://doi.org/10.3389/fphys.2024.1473125">10.3389/fphys.2024.1473125</a>。</p>
 </section>
 
 <section id="volume">
