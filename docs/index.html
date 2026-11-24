@@ -25,7 +25,7 @@
   .scales-top-k { font-weight: 600; font-size: 15px; }
   .scales-top-bar { border: 1px solid #d6d3d1; background: white; padding: 8px 12px; font-size: 14px; line-height: 1.5; }
   .scales-body { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px; }
-  .scales-axis { writing-mode: vertical-rl; transform: rotate(180deg); display: grid; place-items: center; font-weight: 600; font-size: 15px; letter-spacing: 0.06em; }
+  .scales-axis { writing-mode: vertical-rl; text-orientation: upright; display: grid; place-items: center; font-weight: 600; font-size: 15px; letter-spacing: 0.12em; }
   .scales-row { --head: 58px; --icon: 78px; position: relative; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
   .scales-row::before { content: ""; position: absolute; z-index: 0; left: 8%; right: 8%; top: calc(12px + var(--head) + 6px + var(--icon) / 2); height: 2px; background: #8eb3cc; }
   .col { position: relative; z-index: 1; background: #e7f2f8; padding: 12px 8px 10px; min-width: 0; }
@@ -42,7 +42,7 @@
   .rail { margin: 4px 0 0; font-size: 14px; color: #57534e; }
   @media (max-width: 800px) {
     .scales-top, .scales-body { grid-template-columns: 1fr; }
-    .scales-axis { writing-mode: horizontal-tb; transform: none; justify-content: start; margin-bottom: 6px; }
+    .scales-axis { writing-mode: horizontal-tb; text-orientation: mixed; letter-spacing: 0; justify-content: start; margin-bottom: 6px; }
     .scales-scroll { overflow-x: auto; }
     .scales-row { min-width: 980px; }
   }
