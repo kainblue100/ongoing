@@ -20,6 +20,21 @@
   th { background: #292524; color: white; font-weight: 600; }
   section { background: white; border: 1px solid #e7e5e4; padding: 8px 26px 22px; margin-top: 22px; }
   .num { font-variant-numeric: tabular-nums; }
+  .twin-grid { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 18px; align-items: start; margin: 14px 0 8px; }
+  .flow { list-style: none; margin: 0; padding: 0 0 0 18px; border-left: 3px solid #9a3412; }
+  .flow li { position: relative; border: 1px solid #e7e5e4; background: #fafaf9; padding: 10px 14px; margin: 0 0 16px; }
+  .flow li:last-child { margin-bottom: 0; }
+  .flow li::before { content: ""; position: absolute; left: -21px; top: 18px; width: 18px; height: 0; border-top: 2px solid #9a3412; }
+  .flow .k { display: block; font-weight: 600; }
+  .flow .d { display: block; font-size: 15px; color: #44403c; }
+  .flow .join { background: white; }
+  .flow .loop { border-color: #9a3412; background: white; }
+  .now { border: 1px solid #e7e5e4; padding: 12px 14px 8px; background: #fafaf9; }
+  .now p { margin: 0 0 8px; font-weight: 600; }
+  .now ul { margin: 0; padding-left: 1.15em; }
+  .now li { margin: 0 0 6px; }
+  .rail { margin: 4px 0 0; font-size: 14px; color: #57534e; }
+  @media (max-width: 760px) { .twin-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -37,6 +52,36 @@
 <tr><td>H&amp;E 预测空转</td><td>HER2 四折平均相关 0.071，低于文献里 GHIST 的 0.16</td><td><a href="https://github.com/kainblue100/morphgate/blob/main/docs/article.md">MorphGate 文章</a></td></tr>
 </tbody>
 </table>
+
+<section id="twin">
+<h2>四项怎么连成数字孪生</h2>
+<figure class="twin-grid">
+<ol class="flow" aria-label="从同一块组织走到可更新的数字孪生">
+<li><span class="k">同一块组织</span><span class="d">很多张苏木精伊红切片，加上少数几张实测的空间转录组。后来的切片、影像和疗效也从这里进入。</span></li>
+<li><span class="k">H&amp;E 预测空转</span><span class="d">没做空间转录组的切片补上空间状态。实测的那几张当锚，用来核对预测。</span></li>
+<li><span class="k">3D 重构</span><span class="d">按真实层距配准，得到这块组织的几何：病灶、结构和范围各在什么位置。</span></li>
+<li><span class="k">2D 切片演化</span><span class="d">在这个体积里读相邻状态怎样相连，得到这块组织自己的初始邻域。</span></li>
+<li><span class="k">虚拟细胞</span><span class="d">对每个状态做药物或基因扰动，预测细胞下一步变成什么。</span></li>
+<li class="join"><span class="k">组织尺度的反应</span><span class="d">这些细胞待在测到的邻域里一起变。这一层要等上面四步用上同一块组织之后才出现。</span></li>
+<li class="loop"><span class="k">和后来的测量比较</span><span class="d">新的切片、影像或疗效写回上面每一步。对得上，模型留下；对不上，就改预测和模拟。这一圈更新做起来，才是数字孪生。</span></li>
+</ol>
+<aside class="now">
+<p>现在四项还是分开的标本</p>
+<ul>
+<li>3D：小鼠肺 1.5 mm</li>
+<li>2D：三张不连续的人肺 Xenium</li>
+<li>虚拟细胞：Tahoe 2613 / 3388，基座未训</li>
+<li>H&amp;E：HER2 相关 0.071</li>
+</ul>
+</aside>
+</figure>
+<p class="rail">左侧竖线是更新回路，新测量沿它写回上面每一步。</p>
+<p>Tan 等人 2026 年的综述把肿瘤数字孪生写成一架梯子：虚拟细胞，虚拟敲除或过表达，虚拟类器官，虚拟病人。前两级是零件，用来表示细胞、模拟基因扰动。后两级才靠近孪生：类器官把三维的肿瘤微环境建出来，虚拟病人则随这个人的新数据更新，并用来试治疗。他们同时写明工程上的严格定义：虚拟模型和活的对象之间要有持续的双向数据联系。只建一次、或偶尔改一次的，叫做数字影子。</p>
+<p>Kemkar 等人 2024 年引用美国国家科学院的定义，把孪生要模仿的东西收成三件：结构、这个结构所处的环境、以及行为。模型用实物新来的数据更新，预测要能参与决定。他们提出的接法是：细胞尺度的信号模型告诉每个细胞怎么反应，多智能体再把这些细胞放进该病人自己的微环境里，推出组织尺度随时间的变化。用到临床决定之前，还要做验证、确认和不确定性量化。</p>
+<p>四项就按这三件事接。H&amp;E 预测空转负责可扩展的观测：医院里大量存档的是染色切片，空间转录组贵，也覆盖不了旧切片，所以用少数实测切片当锚，把空间状态补到其余切片上。3D 重构负责结构，按真实层距把这些状态配准成一块体积。2D 切片演化负责环境里的空间关系，读出这块体积上哪些状态相邻、轨迹从哪里长出来。虚拟细胞负责行为，给出药物或基因扰动之后细胞状态怎么转移。四步用的是同一块组织时，细胞才能在测到的邻域里一起变，这就是从虚拟细胞走到虚拟类器官的那一层。类器官再被后来的切片、影像和疗效改写，才走到虚拟病人。</p>
+<p>这一圈现在还没有合上。小鼠的 1.5 mm 体积、三张不连续的人肺 Xenium、Tahoe 语料和 HER2 染色切片来自不同标本。换成同一块人肺癌组织上的这四类测量，并且新测量能改回模型之后，才开始是这个病人的数字孪生。验证和不确定性还没有做，所以还不能拿来选药。</p>
+<p class="when">Tan 等，Biomedicines，2026，<a href="https://www.mdpi.com/2227-9059/14/11/2689">14(11):2689</a>。Kemkar 等，Frontiers in Physiology，2024，<a href="https://doi.org/10.3389/fphys.2024.1473125">10.3389/fphys.2024.1473125</a>。</p>
+</section>
 
 <section id="volume">
 <h2>3D 重构</h2>
