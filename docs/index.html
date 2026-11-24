@@ -26,7 +26,7 @@
   .scales-top-bar { border: 1px solid #d6d3d1; background: white; padding: 8px 12px; font-size: 14px; line-height: 1.5; }
   .scales-body { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 10px; }
   .scales-axis { writing-mode: vertical-rl; text-orientation: upright; display: grid; place-items: center; font-weight: 600; font-size: 15px; letter-spacing: 0.12em; }
-  .scales-row { --head: 58px; --icon: 78px; position: relative; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+  .scales-row { --head: 58px; --icon: 78px; position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
   .scales-row::before { content: ""; position: absolute; z-index: 0; left: 8%; right: 8%; top: calc(12px + var(--head) + 6px + var(--icon) / 2); height: 2px; background: #8eb3cc; }
   .col { position: relative; z-index: 1; background: #e7f2f8; padding: 12px 8px 10px; min-width: 0; }
   .col header { height: var(--head); display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 4px; align-items: start; }
@@ -36,15 +36,12 @@
   .col .icon { width: var(--icon); height: var(--icon); margin: 6px auto 8px; border-radius: 50%; background: white; border: 1.5px solid #6e9bb8; display: grid; place-items: center; position: relative; z-index: 1; }
   .col ul { margin: 0; padding-left: 1.05em; font-size: 13px; line-height: 1.45; }
   .col li { margin: 0 0 3px; }
-  .col.out { background: #f5f5f4; }
-  .col.out .n { background: #a8a29e; }
-  .col.out .icon { border-style: dashed; border-color: #a8a29e; }
   .rail { margin: 4px 0 0; font-size: 14px; color: #57534e; }
   @media (max-width: 800px) {
     .scales-top, .scales-body { grid-template-columns: 1fr; }
     .scales-axis { writing-mode: horizontal-tb; text-orientation: mixed; letter-spacing: 0; justify-content: start; margin-bottom: 6px; }
     .scales-scroll { overflow-x: auto; }
-    .scales-row { min-width: 980px; }
+    .scales-row { min-width: 820px; }
   }
 </style>
 </head>
@@ -52,15 +49,15 @@
 <main>
 <h1>四项进行中的工作</h1>
 <p class="lead">3D 重构、2D 切片演化、虚拟细胞、H&amp;E 预测空转。每一项的目的分成生物学问题和临床问题，依据写在该节下面。原理、当前结果和还要走到的地方仍是这项工作自己的进度。</p>
-<p class="when">Tahoe 的分片数记于 2026-11-24 09:21。其余数字来自已经公开的页面和文章。</p>
+<p class="when">训练步数和 H&amp;E 这一轮的相关记于 2026-11-24 17:14。3D 体积没有新测。2D 的公开页面仍是三张切片的结果。</p>
 
 <table>
 <thead><tr><th>项目</th><th>当前结果</th><th>入口</th></tr></thead>
 <tbody>
 <tr><td>3D 重构</td><td>小鼠肺 150 张连续切片，1.5 mm 组织块，11.7 亿体素</td><td><a href="https://kainblue100.github.io/coda-mouse-lung-volume/">体积页面</a></td></tr>
-<tr><td>2D 切片演化</td><td>三张人肺 Xenium，8 个模式，每张切片一棵进化树</td><td><a href="https://kainblue100.github.io/annotile/">Annotile</a></td></tr>
-<tr><td>虚拟细胞</td><td>Tahoe 训练分片 2613 / 3388 已转换；基座还没训</td><td>数据在服务器上，页面还没有</td></tr>
-<tr><td>H&amp;E 预测空转</td><td>HER2 四折平均相关 0.071，低于文献里 GHIST 的 0.16</td><td><a href="https://github.com/kainblue100/morphgate/blob/main/docs/article.md">MorphGate 文章</a></td></tr>
+<tr><td>2D 切片演化</td><td>公开页面仍是三张人肺 Xenium、8 个模式。11 张切片的新拟合有 1,329,253 个细胞、1,875 个窗口，页面没有换成它</td><td><a href="https://kainblue100.github.io/annotile/">Annotile</a></td></tr>
+<tr><td>虚拟细胞</td><td>Tahoe 3388 与 Orion 332 个分片已就绪。三头效应模型训到第 6300 步，还没有跟 STATE 比</td><td>数据在服务器上，页面还没有</td></tr>
+<tr><td>H&amp;E 预测空转</td><td>HER2 四折平均相关 0.0788、SSIM 0.0447、高变基因 0.1267、空间可变基因 0.2236，四项门槛都未过</td><td><a href="https://github.com/kainblue100/morphgate/blob/main/docs/article.md">MorphGate 文章</a></td></tr>
 </tbody>
 </table>
 
@@ -74,21 +71,21 @@
 <div class="scales-body">
 <div class="scales-axis">生物学尺度（由内向外套）</div>
 <div class="scales-scroll">
-<div class="scales-row" aria-label="六个生物学尺度，以及四项工作落在哪一层">
+<div class="scales-row" aria-label="五个生物学尺度，以及四项工作落在哪一层">
 <article class="col">
 <header><span class="n">1</span><span class="t">分子<small>空间上的表达</small></span></header>
 <div class="icon" aria-hidden="true"><svg width="46" height="46" viewBox="0 0 64 64"><g fill="#1d4e73"><rect x="12" y="14" width="10" height="8"/><rect x="27" y="14" width="10" height="8" opacity=".4"/><rect x="42" y="14" width="10" height="8"/><rect x="12" y="28" width="10" height="8" opacity=".4"/><rect x="27" y="28" width="10" height="8"/><rect x="42" y="28" width="10" height="8" opacity=".7"/><rect x="12" y="42" width="10" height="8" opacity=".7"/><rect x="27" y="42" width="10" height="8" opacity=".3"/><rect x="42" y="42" width="10" height="8"/></g></svg></div>
-<ul><li>H&amp;E 预测空转</li><li>斑点上的基因表达</li><li>实测切片当锚</li><li>HER2 相关 0.071</li></ul>
+<ul><li>H&amp;E 预测空转</li><li>斑点上的基因表达</li><li>实测切片当锚</li><li>HER2 相关 0.0788，门槛未过</li></ul>
 </article>
 <article class="col">
 <header><span class="n">2</span><span class="t">细胞内<small>状态与扰动</small></span></header>
 <div class="icon" aria-hidden="true"><svg width="46" height="46" viewBox="0 0 64 64"><circle cx="32" cy="32" r="22" fill="none" stroke="#1d4e73" stroke-width="2"/><circle cx="32" cy="34" r="8" fill="#8ebfdb"/><circle cx="18" cy="22" r="2.2" fill="#1d4e73"/><circle cx="46" cy="24" r="2.2" fill="#1d4e73"/><circle cx="44" cy="44" r="2.2" fill="#1d4e73"/></svg></div>
-<ul><li>虚拟细胞</li><li>药物或基因扰动</li><li>Tahoe 语料</li><li>2613 / 3388，基座未训</li></ul>
+<ul><li>虚拟细胞</li><li>药物或基因扰动</li><li>Tahoe 与 Orion</li><li>3388 分片，效应模型在训</li></ul>
 </article>
 <article class="col">
 <header><span class="n">3</span><span class="t">细胞之间<small>邻域与微环境</small></span></header>
 <div class="icon" aria-hidden="true"><svg width="46" height="46" viewBox="0 0 64 64"><g fill="none" stroke="#1d4e73" stroke-width="2"><path d="M32 16v10M20 40l8-8M44 40l-8-8M20 40h24"/></g><g fill="#1d4e73"><circle cx="32" cy="14" r="4"/><circle cx="32" cy="30" r="4"/><circle cx="18" cy="44" r="4"/><circle cx="46" cy="44" r="4"/></g></svg></div>
-<ul><li>2D 切片演化</li><li>相邻窗口的细胞组成</li><li>上皮、内皮、基质</li><li>三张切片，8 个模式</li></ul>
+<ul><li>2D 切片演化</li><li>相邻窗口的细胞组成</li><li>上皮、内皮、基质</li><li>公开仍是三张，8 个模式</li></ul>
 </article>
 <article class="col">
 <header><span class="n">4</span><span class="t">组织 / 器官<small>几何与病理</small></span></header>
@@ -100,16 +97,11 @@
 <div class="icon" aria-hidden="true"><svg width="46" height="46" viewBox="0 0 64 64"><circle cx="32" cy="16" r="7" fill="#1d4e73"/><path d="M18 52c1.5-13 7-18 14-18s12.5 5 14 18" fill="#1d4e73"/></svg></div>
 <ul><li>数字孪生</li><li>内四层来自同一块组织</li><li>新测量写回各层</li><li>验证后才参与决定</li></ul>
 </article>
-<article class="col out">
-<header><span class="n">6</span><span class="t">人群与病原<small>这四项不到这一层</small></span></header>
-<div class="icon" aria-hidden="true"><svg width="46" height="46" viewBox="0 0 64 64"><circle cx="32" cy="32" r="14" fill="none" stroke="#78716c" stroke-width="2" stroke-dasharray="3 2"/><g fill="#a8a29e"><circle cx="32" cy="10" r="3"/><circle cx="50" cy="24" r="3"/><circle cx="46" cy="46" r="3"/><circle cx="18" cy="46" r="3"/><circle cx="14" cy="24" r="3"/></g></svg></div>
-<ul><li>没有对应项目</li><li>综述里是流行病学、传播和干预</li></ul>
-</article>
 </div>
 </div>
 </div>
 </figure>
-<p class="rail">从左到右，尺度一层套一层：分子在细胞内，细胞在邻域里，邻域在组织里，组织在这个病人里。圆之间的线表示这种包含。顶上的用途是综述里写下的目标。第 6 层照 Bunne 等人的图留着，这四项没有放到那一层。测量时的顺序是另一件事：先把切片配准成体积，再在体积里读邻域。</p>
+<p class="rail">从左到右，尺度一层套一层：分子在细胞内，细胞在邻域里，邻域在组织里，组织在这个病人里。圆之间的线表示这种包含。顶上的用途是综述里写下的目标。测量时的顺序是另一件事：先把切片配准成体积，再在体积里读邻域。</p>
 <p>Tan 等人 2026 年的综述把肿瘤数字孪生写成一架梯子：虚拟细胞，虚拟敲除或过表达，虚拟类器官，虚拟病人。前两级是零件，用来表示细胞、模拟基因扰动。后两级才靠近孪生：类器官把三维的肿瘤微环境建出来，虚拟病人则随这个人的新数据更新，并用来试治疗。他们同时写明工程上的严格定义：虚拟模型和活的对象之间要有持续的双向数据联系。只建一次、或偶尔改一次的，叫做数字影子。</p>
 <p>Kemkar 等人 2024 年引用美国国家科学院的定义，把孪生要模仿的东西收成三件：结构、这个结构所处的环境、以及行为。模型用实物新来的数据更新，预测要能参与决定。他们提出的接法是：细胞尺度的信号模型告诉每个细胞怎么反应，多智能体再把这些细胞放进该病人自己的微环境里，推出组织尺度随时间的变化。用到临床决定之前，还要做验证、确认和不确定性量化。</p>
 <p>四项就按这三件事接。H&amp;E 预测空转负责可扩展的观测：医院里大量存档的是染色切片，空间转录组贵，也覆盖不了旧切片，所以用少数实测切片当锚，把空间状态补到其余切片上。3D 重构负责结构，按真实层距把这些状态配准成一块体积。2D 切片演化负责环境里的空间关系，读出这块体积上哪些状态相邻、轨迹从哪里长出来。虚拟细胞负责行为，给出药物或基因扰动之后细胞状态怎么转移。四步用的是同一块组织时，细胞才能在测到的邻域里一起变，这就是从虚拟细胞走到虚拟类器官的那一层。类器官再被后来的切片、影像和疗效改写，才走到虚拟病人。</p>
@@ -139,12 +131,13 @@
 <p>临床上，同一篇工作把原发和转移的生长方式分开，并在三维亚克隆周围看到免疫耗竭标志升高、免疫热区和冷区并存。这些局部结构被认为和治疗抵抗有关。他们自己的材料是六个癌种的 Visium，不是肺的 Xenium。这里的切片演化接到的是其中“位置上的组织状态如何相连”这一层：在一张切片里，从分化上皮出发，看相邻区域的细胞组成和表达怎么变。它还没有亚克隆的突变或拷贝数，也不能直接告诉一位病人该用哪种药。</p>
 <p class="when">Mo 等，Nature，2024，<a href="https://doi.org/10.1038/s41586-024-08087-4">10.1038/s41586-024-08087-4</a>。</p>
 <h3>原理</h3>
-<p>三张公开人肺 Xenium 先切成边长 400 µm、至少 30 个细胞的小窗，共 785 个。特征是细胞类型比例、153 个共有基因的 16 个主成分，以及配准 H&amp;E 的颜色和纹理。细簇再用高斯混合按 BIC 收成 8 个模式。相邻小窗同模式的比例是 83.6%。种子是 42。</p>
+<p>公开页面用的是三张人肺 Xenium。小窗边长 400 µm、至少 30 个细胞，共 785 个。特征是细胞类型比例、153 个共有基因的 16 个主成分，以及配准 H&amp;E 的颜色和纹理。细簇再用高斯混合按 BIC 收成 8 个模式。相邻小窗同模式的比例是 83.6%。种子是 42。</p>
 <p>进化关系按切片分开做。一步只能走在同一张切片上边相邻的小窗之间，代价是上面那份特征的距离。根是这张切片上分化上皮比例最高的小窗。做法对应 Pham 等人 2023 年的 pseudo-time-space。没有剪接和未剪接计数，所以没有 RNA velocity。三个供体没有接成一条轨迹。</p>
 <h3>当前结果</h3>
 <p>5k 的视频枝是 P7 → P4，上皮比例 0.47 到 0.21，内皮 0.06 到 0.34。lc 是 P5 → P1，上皮 0.27 到 0.48，内皮 0.43 到 0.07。luad 是 P7 → P2 → P8，上皮 0.53、0.59 再到 0.11，到 P8 时内皮 0.41。转移箭头画在配准后的 H&amp;E 上。t-SNE 和 UMAP 里，灰线和红线是这棵空间树，线表示切片上相邻。</p>
 <p>表达程序可以叠在同一个模式上。P2 上皮 z 分数 +1.38，增殖 −0.10。P3 的增殖 +2.59、基质 +1.32、CXCL9 +2.01 同时高，分数主要来自 lc。面板里没有 ISG15、IFI27、IFIT3、HLA-DRA，所以没有做患者级 archetype，也没有做跨患者 ecotype。</p>
 <p>演化视频约 8 秒。玻璃盒后面的肺是 BodyParts3D 的成人解剖模型，只作外形，不是这三张切片重建出来的。</p>
+<p>2026-11-24 另有一次拟合，把队列加到 11 张切片，留下 1,329,253 个细胞、1,875 个窗口。共有基因降到 68 个，特征里没有 H&amp;E，细簇 44 个，仍收成 8 个模式，相邻小窗同模式的比例是 83.4%。这次模式按平台分开，三张切片各自收成一个模式。Annotile 页面仍用上面三张切片的结果。</p>
 <h3>期待目标</h3>
 <p>下一步要用同一块组织的连续切片，让 z 方向的变化也有细胞类型，而不是只有密度。三张 Xenium 继续保持三个供体、三条轨迹。</p>
 </section>
@@ -156,13 +149,13 @@
 <p>临床上，同一篇展望把用途写成三件：找出新的药物靶点，预测细胞对扰动的反应，以及把假设的搜索扩大到做不完的实验之外。准确的细胞模型也被他们用来追疾病的原因。他们同时把评价标准、数据需求和可解释性列为还没完成的条件。这项工作里，Tahoe 是为这种大规模模拟准备的扰动细胞语料；浏览器里的小模型只用来看知识 token 这种结构怎么工作。两者都还没有识别出新靶点，也没有进入临床决策。</p>
 <p class="when">Bunne 等，Cell，2024，<a href="https://doi.org/10.1016/j.cell.2024.11.015">10.1016/j.cell.2024.11.015</a>。</p>
 <h3>原理</h3>
-<p>大规模路线跟着虚拟细胞基座的想法：先在大量观察细胞上学细胞状态，再在扰动过的细胞上学转移。数据用 Tahoe-100M 的训练集分片。每个分片转成无压缩的 h5，计数能放进 int16 就用 int16，基因按指针索引，转完的 parquet 删掉，避免占满磁盘。3388 个训练分片都核对过之后才开始基座训练。</p>
+<p>大规模路线跟着虚拟细胞基座的想法：先在大量观察细胞上学细胞状态，再在扰动过的细胞上学转移。Tahoe-100M 的 3388 个训练分片和 Orion 的 332 个分片都已转成 h5。正在跑的是效应模型，对每个扰动预测强度、方向和幅度。种子是 42，用 GPU 0。K562 和 RPE1 留出。细胞系特异的表观残差等这一阶段稳定后再接。</p>
 <p>浏览器里的实验站是另一件小得多的东西。它按 Arc 公开的 PIE 结构，把知识做成 token，在 16 个基因、若干细胞系和扰动的合成汇总表上训练一个能看懂的小模型。那张表的数字按细胞周期、TP53、mTOR、KRAS/MAPK 和干扰素几条通路书写，不是 Replogle 的原始计数，也不是 Tahoe。</p>
 <h3>当前结果</h3>
-<p>2026-11-24 09:21，服务器上已有 <span class="num">2613 / 3388</span> 个 h5，文件名从 <span class="num">train-00000</span> 到 <span class="num">train-02612</span>。下载和转换仍在原来的监督进程里跑。元数据目录的 7 个文件还在。基座训练没有开始。</p>
-<p>实验站可以在本地改学习率、步数和知识源开关，立刻看到预测曲线变。它说明 PIE 这一类结构怎么读 STRING 和 DepMap，不能当作 Tahoe 基座的成绩。</p>
+<p>2026-11-24 17:14，效应模型训到第 <span class="num">6300</span> 步，读过约 <span class="num">2217</span> 万个细胞。这一步训练损失 1.1332，验证损失 1.5587。留出细胞数是 0。还没有用 Cell-Eval 或 cell-eval2 跟 STATE 比，这组损失还不是结果。</p>
+<p>实验站可以在本地改学习率、步数和知识源开关，立刻看到预测曲线变。它说明 PIE 这一类结构怎么读 STRING 和 DepMap，不能当作这次效应模型的成绩。</p>
 <h3>期待目标</h3>
-<p>3388 个分片到齐、抽查计数类型和细胞数之后，再在空闲的 GPU 上训练基座。训练开始前不把浏览器小模型的相关写成虚拟细胞的结果。</p>
+<p>这一阶段训稳之后，再做参考转移和细胞系特异的表观残差，并用 Cell-Eval、cell-eval2 跟 STATE 比。比完之前不把训练损失写成超过 STATE。</p>
 </section>
 
 <section id="morphgate">
@@ -173,10 +166,11 @@
 <p class="when">Wang 等，Nature Communications，2025，<a href="https://doi.org/10.1038/s41467-025-56618-y">10.1038/s41467-025-56618-y</a>。</p>
 <h3>原理</h3>
 <p>协议来自 Wang 等人 Nature Communications 2025 的基准。HER2 阳性乳腺癌和皮肤鳞癌各分四折，同一病人的相邻切片留在同一折。两折训练，一折验证，一折测试。报的是四个测试折的平均。基因是全体切片共有、方差最高的 785 个（HER2）和 997 个（cSCC）。高变基因是其中方差最高的 30 个。空间可变基因按阵列上 6 个近邻的 Moran's I 取 20 个。这和原文的 scran、SPARK-X 名单不完全一样。</p>
-<p>MorphGate 用斑点及其六个近邻的染色特征做岭回归。门控会把训练集里相关低于 0.10 的基因填成训练集均值。去掉门控则 785 或 997 个基因都回归。GHIST-spot 只保留组成关系：6 个表达程序，再用染色特征预测程序权重。Fu 等人原文的深度网络和 Hover-Net 细胞核分割没有重跑。原文报告的 0.16 写在表里单独一行。</p>
+<p>文章里的 MorphGate 用斑点及其六个近邻的染色特征做岭回归。门控会把训练集里相关低于 0.10 的基因填成训练集均值。去掉门控则 785 或 997 个基因都回归。GHIST-spot 只保留组成关系：6 个表达程序，再用染色特征预测程序权重。Fu 等人原文的深度网络和 Hover-Net 细胞核分割没有重跑。原文报告的 0.16 写在表里单独一行。</p>
+<p>文章之后又跑了一轮。斑点切成 224 像素，用冻结的 ImageNet ResNet-18 取 512 维，按切片居中，再做 64 维主成分和 6 近邻平均。验证折在岭回归、近邻检索、原型和混合里选一个。同一套四折和基因定义。</p>
 <h3>当前结果</h3>
-<p>HER2，四个测试折的平均：去掉门控的 MorphGate，Pearson 相关 0.071，SSIM 0.045，高变基因相关 0.072，空间可变基因相关 0.141。同一次运行的 GHIST-spot 是 0.044、0.018、0.044、0.063。带门控的全基因相关掉到 0.025，因为多数基因被填成常数。cSCC 上去掉门控是 0.099，GHIST-spot 是 0.093。</p>
-<p>文献里 GHIST 在 HER2 上的平均相关是 0.16，SSIM 0.10，高变基因 0.20，空间可变基因 0.27。这次两个模型都还低于这四项。FASN 的空间图两边都把高低表达压在一条窄带里，组织轮廓还在。</p>
+<p>后一轮 HER2 四个测试折的平均：相关 0.0788，SSIM 0.0447，高变基因相关 0.1267，空间可变基因相关 0.2236。cSCC 上相关 0.1398，SSIM 0.0768，高变基因相关 0.1435，空间可变基因相关 0.1854。四项门槛都没过，文章因此没改。</p>
+<p>文章里仍是更早的对照：去掉门控的 MorphGate，HER2 相关 0.071，SSIM 0.045，高变基因相关 0.072，空间可变基因相关 0.141；GHIST-spot 是 0.044、0.018、0.044、0.063。文献里 GHIST 的 0.16、0.10、0.20、0.27 是原文数字，不是这两次重算。</p>
 <h3>期待目标</h3>
 <p>在我们自己的这套定义上，HER2 四折平均同时超过相关 0.16、SSIM 0.10、高变基因相关 0.20、空间可变基因相关 0.27。四项都过了再改文章。没过之前，文章保持现在的对照，不把文献里的 0.16 画成这次重算的结果。</p>
 </section>
