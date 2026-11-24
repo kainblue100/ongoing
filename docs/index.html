@@ -37,6 +37,9 @@
   .col ul { margin: 0; padding-left: 1.05em; font-size: 13px; line-height: 1.45; }
   .col li { margin: 0 0 3px; }
   .rail { margin: 4px 0 0; font-size: 14px; color: #57534e; }
+  svg.schematic { width: 100%; max-width: 820px; height: auto; background: #fafaf9; border: 1px solid #e7e5e4; display: block; margin: 12px 0 6px; }
+  .deck img, .deck iframe { width: 100%; max-width: 960px; display: block; border: 1px solid #e7e5e4; background: white; margin: 12px 0; }
+  .deck iframe { height: 640px; }
   @media (max-width: 800px) {
     .scales-top, .scales-body { grid-template-columns: 1fr; }
     .scales-axis { writing-mode: horizontal-tb; text-orientation: mixed; letter-spacing: 0; justify-content: start; margin-bottom: 6px; }
@@ -49,13 +52,13 @@
 <main>
 <h1>四项进行中的工作</h1>
 <p class="lead">3D 重构、2D 切片演化、虚拟细胞、H&amp;E 预测空转。每一项的目的分成生物学问题和临床问题，依据写在该节下面。原理、当前结果和还要走到的地方仍是这项工作自己的进度。</p>
-<p class="when">训练步数和 H&amp;E 这一轮的相关记于 2026-11-24 17:14。3D 体积没有新测。2D 的公开页面仍是三张切片的结果。</p>
+<p class="when">训练步数和 H&amp;E 这一轮的相关记于 2026-11-24 17:14。3D 体积没有新测。2D 的公开页面是 17 张 Takano、800 µm、4 个模式，模式之间还没有画成动态过程。</p>
 
 <table>
 <thead><tr><th>项目</th><th>当前结果</th><th>入口</th></tr></thead>
 <tbody>
 <tr><td>3D 重构</td><td>小鼠肺 150 张连续切片，1.5 mm 组织块，11.7 亿体素</td><td><a href="https://kainblue100.github.io/coda-mouse-lung-volume/">体积页面</a></td></tr>
-<tr><td>2D 切片演化</td><td>公开页面仍是三张人肺 Xenium、8 个模式。11 张切片的新拟合有 1,329,253 个细胞、1,875 个窗口，页面没有换成它</td><td><a href="https://kainblue100.github.io/annotile/">Annotile</a></td></tr>
+<tr><td>2D 切片演化</td><td>公开页面是 17 张 Takano、800 µm、4 个模式。模式之间还没有画成随时间变化的过程</td><td><a href="https://kainblue100.github.io/annotile/">Annotile</a></td></tr>
 <tr><td>虚拟细胞</td><td>Tahoe 3388 与 Orion 332 个分片已就绪。三头效应模型训到第 6300 步，还没有跟 STATE 比</td><td>数据在服务器上，页面还没有</td></tr>
 <tr><td>H&amp;E 预测空转</td><td>HER2 四折平均相关 0.0788、SSIM 0.0447、高变基因 0.1267、空间可变基因 0.2236，四项门槛都未过</td><td><a href="https://github.com/kainblue100/morphgate/blob/main/docs/article.md">MorphGate 文章</a></td></tr>
 </tbody>
@@ -85,7 +88,7 @@
 <article class="col">
 <header><span class="n">3</span><span class="t">细胞之间<small>邻域与微环境</small></span></header>
 <div class="icon" aria-hidden="true"><svg width="46" height="46" viewBox="0 0 64 64"><g fill="none" stroke="#1d4e73" stroke-width="2"><path d="M32 16v10M20 40l8-8M44 40l-8-8M20 40h24"/></g><g fill="#1d4e73"><circle cx="32" cy="14" r="4"/><circle cx="32" cy="30" r="4"/><circle cx="18" cy="44" r="4"/><circle cx="46" cy="44" r="4"/></g></svg></div>
-<ul><li>2D 切片演化</li><li>相邻窗口的细胞组成</li><li>上皮、内皮、基质</li><li>公开仍是三张，8 个模式</li></ul>
+<ul><li>2D 切片演化</li><li>相邻窗口的细胞组成</li><li>上皮、内皮、基质</li><li>17 张，4 个模式，还没有动态过程</li></ul>
 </article>
 <article class="col">
 <header><span class="n">4</span><span class="t">组织 / 器官<small>几何与病理</small></span></header>
@@ -121,7 +124,38 @@
 <p>小鼠肺数据集 150 张、每张 10 µm。体积网格 2983 × 2497 × 150，共 1,117,282,650 个体素。物理尺寸 11.93 × 9.99 × 1.50 mm，体积 0.179 cm³，大约是一整个小鼠肺的 13.8%。体素是 4 × 4 × 10 µm。七类里肺泡占组织的大头，血管 0.228 mm³，细支气管 0.334 mm³，分类器标成癌的体素只有 0.023 mm³。验证损失 0.02596。页面上的旋转视频是这同一个体积。</p>
 <p>这是 1.5 mm 厚的组织块。小鼠肺大约长 10 到 20 mm，所以画面上是一块带支气管血管树的组织，还不是整个肺的外形。血管和气道在图里显得比数据粗，因为渲染的发光把一两体素厚的结构加宽了。人体解剖肺模型和程序生成的小鼠肺叶没有放进这个体积。</p>
 <h3>期待目标</h3>
-<p>近处要守住的是：再加切片时仍然按真实层距堆，外形和测量分开标。整肺外形需要再有几百张同一只肺的切片。人肺癌的三维体积要另做：公开的一例非小细胞肺癌有 34 张连续 5 µm 切片，其中 6 张 CosMx 已配准，层间距 30 µm，六层共 340,644 个细胞位置，已经画在 Annotile 上。那是位置，细胞类型还在原作者的 Seurat 对象里，所以还没有叠成带标签的人肺体积，也没有和这只小鼠的体积合并。</p>
+<p>Storrs 等人在乳腺和前列腺里看到：一张切面上分开的上皮区，沿切片厚度连成同一块。乳腺样本 HT704B1 上，切面距离超过 5 mm 的两块上皮，在大约 200 µm 的层叠里接上；光片成像里，看似散开的浸润癌在三维里是一棵连通的树，原位癌或高级别上皮内瘤变嵌在这棵树里，或正在变成浸润癌。肺癌这边要做的是同一件事：先在二维上把区域分开，再检查这些区域在第三维是否相通，并画出连通的那一块。</p>
+<p class="when">Storrs 等，Cancer Discovery，2026，<a href="https://aacrjournals.org/cancerdiscovery/article/16/9/1819/787684/Spatial-Mapping-of-the-Precancer-to-Cancer">Spatial Mapping of the Precancer-to-Cancer Transition in Breast and Prostate</a>。</p>
+<svg class="schematic" viewBox="0 0 820 250" role="img" aria-label="左图一张切面上两块分开的区域，右图沿厚度叠起来后连成一块。">
+  <title>二维分开，三维相通</title>
+  <text x="16" y="28" font-size="16" font-weight="700" fill="#1c1917">一张切面</text>
+  <rect x="16" y="42" width="360" height="180" fill="#f5e6d3" stroke="#d6d3d1"/>
+  <ellipse cx="130" cy="110" rx="52" ry="36" fill="#9a3412"/>
+  <ellipse cx="268" cy="150" rx="46" ry="32" fill="#9a3412"/>
+  <text x="104" y="114" fill="white" font-size="13">区域 A</text>
+  <text x="242" y="154" fill="white" font-size="13">区域 B</text>
+  <text x="16" y="246" font-size="13" fill="#44403c">切面上不相连</text>
+  <text x="430" y="28" font-size="16" font-weight="700" fill="#1c1917">沿厚度叠起来</text>
+  <g transform="translate(430,48)">
+    <rect x="0" y="132" width="300" height="22" fill="#f5e6d3" stroke="#d6d3d1"/>
+    <ellipse cx="70" cy="143" rx="28" ry="8" fill="#9a3412"/>
+    <rect x="18" y="88" width="300" height="22" fill="#f5e6d3" stroke="#d6d3d1"/>
+    <ellipse cx="118" cy="99" rx="30" ry="8" fill="#9a3412"/>
+    <rect x="36" y="44" width="300" height="22" fill="#f5e6d3" stroke="#d6d3d1"/>
+    <ellipse cx="168" cy="55" rx="32" ry="8" fill="#9a3412"/>
+    <rect x="54" y="0" width="300" height="22" fill="#f5e6d3" stroke="#d6d3d1"/>
+    <ellipse cx="214" cy="11" rx="30" ry="8" fill="#9a3412"/>
+    <path d="M70 143 C90 120, 100 112, 118 99 C140 78, 150 68, 168 55 C190 34, 198 24, 214 11" fill="none" stroke="#1d4e73" stroke-width="3"/>
+  </g>
+  <text x="430" y="246" font-size="13" fill="#44403c">A 和 B 在第三维连成一块。肺癌里还没有画出这一块。</text>
+</svg>
+<p class="when">规划和图就在这一节里。</p>
+<div class="deck">
+  <img src="slides/01.png" alt="第 1 页：切面上分开的区域 A 和 B，沿厚度用一条路径连成一块，旁边是四步规划">
+  <img src="slides/02.png" alt="第 2 页：3D 重构目前进展，小鼠体积、分类、人肺癌连续切片，以及三维相通还没有做">
+  <iframe src="3d-2d-plan.pdf" title="四页幻灯片，可在页面里翻"></iframe>
+</div>
+<p class="when"><a href="3d-2d-plan.pptx">下载 pptx</a>。<a href="3d-2d-plan.pdf">下载 pdf</a>。2D 的两页也在这份文件里，并嵌在下一节。</p>
 </section>
 
 <section id="evolution">
@@ -131,15 +165,42 @@
 <p>临床上，同一篇工作把原发和转移的生长方式分开，并在三维亚克隆周围看到免疫耗竭标志升高、免疫热区和冷区并存。这些局部结构被认为和治疗抵抗有关。他们自己的材料是六个癌种的 Visium，不是肺的 Xenium。这里的切片演化接到的是其中“位置上的组织状态如何相连”这一层：在一张切片里，从分化上皮出发，看相邻区域的细胞组成和表达怎么变。它还没有亚克隆的突变或拷贝数，也不能直接告诉一位病人该用哪种药。</p>
 <p class="when">Mo 等，Nature，2024，<a href="https://doi.org/10.1038/s41586-024-08087-4">10.1038/s41586-024-08087-4</a>。</p>
 <h3>原理</h3>
-<p>公开页面用的是三张人肺 Xenium。小窗边长 400 µm、至少 30 个细胞，共 785 个。特征是细胞类型比例、153 个共有基因的 16 个主成分，以及配准 H&amp;E 的颜色和纹理。细簇再用高斯混合按 BIC 收成 8 个模式。相邻小窗同模式的比例是 83.6%。种子是 42。</p>
+<p>下面这棵树用的是三张人肺 Xenium。小窗边长 400 µm、至少 30 个细胞，共 785 个。特征是细胞类型比例、153 个共有基因的 16 个主成分，以及配准 H&amp;E 的颜色和纹理。细簇再用高斯混合按 BIC 收成 8 个模式。相邻小窗同模式的比例是 83.6%。种子是 42。</p>
 <p>进化关系按切片分开做。一步只能走在同一张切片上边相邻的小窗之间，代价是上面那份特征的距离。根是这张切片上分化上皮比例最高的小窗。做法对应 Pham 等人 2023 年的 pseudo-time-space。没有剪接和未剪接计数，所以没有 RNA velocity。三个供体没有接成一条轨迹。</p>
 <h3>当前结果</h3>
 <p>5k 的视频枝是 P7 → P4，上皮比例 0.47 到 0.21，内皮 0.06 到 0.34。lc 是 P5 → P1，上皮 0.27 到 0.48，内皮 0.43 到 0.07。luad 是 P7 → P2 → P8，上皮 0.53、0.59 再到 0.11，到 P8 时内皮 0.41。转移箭头画在配准后的 H&amp;E 上。t-SNE 和 UMAP 里，灰线和红线是这棵空间树，线表示切片上相邻。</p>
 <p>表达程序可以叠在同一个模式上。P2 上皮 z 分数 +1.38，增殖 −0.10。P3 的增殖 +2.59、基质 +1.32、CXCL9 +2.01 同时高，分数主要来自 lc。面板里没有 ISG15、IFI27、IFIT3、HLA-DRA，所以没有做患者级 archetype，也没有做跨患者 ecotype。</p>
 <p>演化视频约 8 秒。玻璃盒后面的肺是 BodyParts3D 的成人解剖模型，只作外形，不是这三张切片重建出来的。</p>
-<p>2026-11-24 另有一次拟合，把队列加到 11 张切片，留下 1,329,253 个细胞、1,875 个窗口。共有基因降到 68 个，特征里没有 H&amp;E，细簇 44 个，仍收成 8 个模式，相邻小窗同模式的比例是 83.4%。这次模式按平台分开，三张切片各自收成一个模式。Annotile 页面仍用上面三张切片的结果。</p>
+<p>2026-11-24 另有一次拟合，把队列加到 11 张切片，留下 1,329,253 个细胞、1,875 个窗口。共有基因降到 68 个，特征里没有 H&amp;E，细簇 44 个，仍收成 8 个模式，相邻小窗同模式的比例是 83.4%。这次模式按平台分开。Annotile 公开页面现在是 17 张 Takano、800 µm、4 个模式。上面三张切片的树留在记录里，三个供体没有接成一条轨迹。</p>
 <h3>期待目标</h3>
-<p>下一步要用同一块组织的连续切片，让 z 方向的变化也有细胞类型，而不是只有密度。三张 Xenium 继续保持三个供体、三条轨迹。</p>
+<p>同一块肿瘤很少能在几个真实时间点上被反复取到。下一步把已经分出的潜在模式连成进化关系，画成一个动态过程：从一个模式走到相邻的另一个模式，用空间上的相邻和细胞组成的变化代替缺失的时间序列。三张切片上已有的树只说明每张切片内部相邻，还不是这个动态过程。17 张、800 µm 的 4 个模式也还是一次静态划分。</p>
+<svg class="schematic" viewBox="0 0 820 210" role="img" aria-label="潜在模式沿一条路径变化，用来代替采不到的多个时间点。">
+  <title>用空间上的模式变化代替时间序列</title>
+  <text x="16" y="28" font-size="16" font-weight="700" fill="#1c1917">采不到的时间</text>
+  <g fill="#e7e5e4" stroke="#a8a29e" stroke-dasharray="5 4">
+    <rect x="16" y="48" width="150" height="72"/>
+    <rect x="186" y="48" width="150" height="72"/>
+    <rect x="356" y="48" width="150" height="72"/>
+  </g>
+  <text x="48" y="90" font-size="14" fill="#57534e">时间点 1</text>
+  <text x="218" y="90" font-size="14" fill="#57534e">时间点 2</text>
+  <text x="388" y="90" font-size="14" fill="#57534e">时间点 3</text>
+  <text x="16" y="146" font-size="13" fill="#44403c">同一病灶的连续活检通常没有。</text>
+  <text x="16" y="186" font-size="16" font-weight="700" fill="#1c1917">用一张切片上的模式关系代替</text>
+  <g font-size="14" fill="white">
+    <rect x="520" y="48" width="70" height="36" fill="#9a3412"/><text x="538" y="71">P1</text>
+    <rect x="640" y="48" width="70" height="36" fill="#0f766e"/><text x="658" y="71">P2</text>
+    <rect x="700" y="120" width="70" height="36" fill="#1d4ed8"/><text x="718" y="143">P3</text>
+  </g>
+  <path d="M590 66 H640 M675 84 C690 100, 700 108, 735 120" fill="none" stroke="#1c1917" stroke-width="1.6"/>
+  <text x="600" y="108" font-size="12" fill="#44403c">相邻</text>
+</svg>
+<p class="when">规划和图就在这一节里。</p>
+<div class="deck">
+  <img src="slides/03.png" alt="第 3 页：采不到的时间点用虚线框表示，模式 P1 到 P2 再到 P3 画成一条变化">
+  <img src="slides/04.png" alt="第 4 页：2D 切片演化目前进展，17 张的静态模式、三张切片内部的树，动态过程还没有做">
+</div>
+<p class="when">上一节的 pdf 里可以连着翻这四页。<a href="3d-2d-plan.pptx">下载 pptx</a>。</p>
 </section>
 
 <section id="virtual">
