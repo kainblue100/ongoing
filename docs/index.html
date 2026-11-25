@@ -68,7 +68,7 @@
 <tbody>
 <tr><td>3D 重构</td><td>小鼠肺 150 张连续切片，1.5 mm 组织块，11.7 亿体素</td><td><a href="https://kainblue100.github.io/coda-mouse-lung-volume/">体积页面</a></td></tr>
 <tr><td>2D 切片演化</td><td>公开页面是 17 张 Takano、800 µm、4 个模式。模式之间还没有画成随时间变化的过程</td><td><a href="https://kainblue100.github.io/annotile/">Annotile</a></td></tr>
-<tr><td>虚拟细胞</td><td>效应模型从第 19281 步接着训。另一张 GPU 上的 Epi-GRN 加到 1024 维、10 万步，cell-eval 出来之前不跟 STATE 比输赢</td><td>数据在服务器上，页面还没有</td></tr>
+<tr><td>虚拟细胞</td><td>和 STATE 的 cell-eval 里，K562 表达变化相关最好是 0.2564，STATE 是 0.0644。显著基因召回还没有超过 STATE</td><td><a href="https://kainblue100.github.io/vcell/">虚拟细胞页面</a></td></tr>
 <tr><td>H&amp;E 预测空转</td><td>HER2 四折平均相关 0.0788、SSIM 0.0447、高变基因 0.1267、空间可变基因 0.2236，四项门槛都未过</td><td><a href="https://github.com/kainblue100/morphgate/blob/main/docs/article.md">MorphGate 文章</a></td></tr>
 </tbody>
 </table>
@@ -329,11 +329,30 @@
 <p class="rail">结构与 <a href="https://kainblue100.github.io/Epi-Duo/">Epi-Duo</a> 的共同骨架相同。模型 A 把表观证据收成边再做消息传递，模型 B 把每个基因最多 24 个顺式元件池化成一个向量。两条先验都从被敲基因和每个输出基因这两处进骨架。</p>
 <p>浏览器里的实验站是另一件小得多的东西。它按 Arc 公开的 PIE 结构，把知识做成 token，在 16 个基因、若干细胞系和扰动的合成汇总表上训练一个能看懂的小模型。那张表的数字按细胞周期、TP53、mTOR、KRAS/MAPK 和干扰素几条通路书写，不是 Replogle 的原始计数，也不是 Tahoe。</p>
 <h3>当前结果</h3>
-<p>2026-11-24 22:15，效应模型从第 <span class="num">19281</span> 步接着训，此前读过约 <span class="num">6733</span> 万个细胞。这一轮批大小 32，每个分片最多 400 个批次，显存额度设到这张卡的 85%。留出细胞数仍是 0。这组损失还不是跟 STATE 的比较。</p>
-<p>另一张空着的 GPU 在训更大的 Epi-GRN：隐藏维 1024、8 层、约 1.12 亿参数、批大小 64、10 万步、种子 42，先留出 K562，再留出 RPE1，跑完用同一套 cell-eval 跟官方 STATE-sm 比。已经公布的 2 万步、种子 42 结果里，K562 留出的 pearson_delta 是 Epi-GRN 0.256、STATE 0.064，context_mean 是 0.271。这一轮的表还没有出来，所以不写成超过 STATE。</p>
+<p>下面是四次训练里，每一项更好的那一次，和官方 STATE-sm 用同一套 cell-eval 比。种子是 42。10 万步没有在每一项上都超过 2 万步。Tahoe 上的三头效应模型还在训练，它的损失不是这张表。</p>
+<table>
+<thead><tr><th>留出</th><th>指标</th><th>最好的一次</th><th>分数</th><th>STATE</th><th>和 STATE 比</th></tr></thead>
+<tbody>
+<tr><td>K562</td><td>表达变化相关</td><td>候选网络，2 万步</td><td class="num">0.2564</td><td class="num">0.0644</td><td>更好</td></tr>
+<tr><td>K562</td><td>均方误差</td><td>顺式元件，2 万步</td><td class="num">0.0049</td><td class="num">0.0391</td><td>更好</td></tr>
+<tr><td>K562</td><td>扰动判别</td><td>候选网络，2 万步</td><td class="num">0.6438</td><td class="num">0.5368</td><td>更好</td></tr>
+<tr><td>K562</td><td>差异基因重叠</td><td>候选网络，2 万步</td><td class="num">0.0980</td><td class="num">0.0643</td><td>更好</td></tr>
+<tr><td>K562</td><td>变化方向一致</td><td>候选网络，10 万步</td><td class="num">0.7415</td><td class="num">0.5555</td><td>更好</td></tr>
+<tr><td>K562</td><td>显著基因召回</td><td>无先验，2 万步</td><td class="num">0.4886</td><td class="num">0.4962</td><td>还没有</td></tr>
+<tr><td>K562</td><td>显著基因秩相关</td><td>候选网络，2 万步</td><td class="num">0.5509</td><td class="num">0.5700</td><td>还没有</td></tr>
+<tr><td>RPE1</td><td>表达变化相关</td><td>顺式元件，2 万步</td><td class="num">0.4789</td><td class="num">0.3314</td><td>更好</td></tr>
+<tr><td>RPE1</td><td>均方误差</td><td>候选网络，2 万步</td><td class="num">0.0128</td><td class="num">0.0395</td><td>更好</td></tr>
+<tr><td>RPE1</td><td>扰动判别</td><td>候选网络，2 万步</td><td class="num">0.6516</td><td class="num">0.6245</td><td>更好</td></tr>
+<tr><td>RPE1</td><td>差异基因重叠</td><td>顺式元件，2 万步</td><td class="num">0.2628</td><td class="num">0.2035</td><td>更好</td></tr>
+<tr><td>RPE1</td><td>变化方向一致</td><td>顺式元件，2 万步</td><td class="num">0.7696</td><td class="num">0.6626</td><td>更好</td></tr>
+<tr><td>RPE1</td><td>显著基因召回</td><td>顺式元件，2 万步</td><td class="num">0.6663</td><td class="num">0.6571</td><td>更好</td></tr>
+<tr><td>RPE1</td><td>显著基因秩相关</td><td>候选网络，2 万步</td><td class="num">0.4400</td><td class="num">0.4530</td><td>还没有</td></tr>
+</tbody>
+</table>
+<p class="when">均方误差越低越好，其余越高越好。K562 的表达变化相关，context_mean 是 0.2710，仍高于我们的 0.2564。K562 的扰动判别，perturb_mean 是 0.7129，仍高于我们的 0.6438。RPE1 的表达变化相关，context_mean 是 0.5504，仍高于我们的 0.4789。四次训练放在一起的表在 <a href="https://kainblue100.github.io/vcell/">虚拟细胞页面</a>。</p>
 <p>实验站可以在本地改学习率、步数和知识源开关，立刻看到预测曲线变。它说明 PIE 这一类结构怎么读 STRING 和 DepMap，不能当作这次效应模型的成绩。</p>
 <h3>期待目标</h3>
-<p>这一阶段训稳之后，再做参考转移和细胞系特异的表观残差，并用 Cell-Eval、cell-eval2 跟 STATE 比。比完之前不把训练损失写成超过 STATE。要对齐的外部标准是 2026 年虚拟细胞挑战赛的前三名。下图是官方公布的奖金，每一名都是一半现金、一半 NVIDIA Brev 额度。</p>
+<p>上面的表是集合到集合模型的 cell-eval。Tahoe 效应模型的训练损失仍然不能写成超过 STATE。表观残差还没有接到这次效应模型上。外部还有 2026 年虚拟细胞挑战赛的前三名。下图是官方公布的奖金，每一名都是一半现金、一半 NVIDIA Brev 额度。</p>
 <svg class="schematic" viewBox="0 0 820 250" role="img" aria-label="2026 年虚拟细胞挑战赛前三名奖金：10 万美元、5 万美元、2.5 万美元">
   <title>2026 年虚拟细胞挑战赛前三名奖金</title>
   <text x="16" y="28" font-size="16" font-weight="700" fill="#1c1917">2026 年前三名</text>
