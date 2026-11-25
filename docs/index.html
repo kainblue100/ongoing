@@ -49,6 +49,8 @@
   @media (prefers-reduced-motion: reduce) { .slab { animation: none; } }
   .deck img, .deck iframe { width: 100%; max-width: 960px; display: block; border: 1px solid #e7e5e4; background: white; margin: 12px 0; }
   .deck iframe { height: 640px; }
+  .video { margin: 14px 0 6px; max-width: 960px; }
+  .video iframe { width: 100%; aspect-ratio: 16 / 9; height: auto; min-height: 360px; border: 1px solid #e7e5e4; background: #1c1917; display: block; }
   @media (max-width: 800px) {
     .scales-top, .scales-body { grid-template-columns: 1fr; }
     .scales-axis { writing-mode: horizontal-tb; text-orientation: mixed; letter-spacing: 0; justify-content: start; margin-bottom: 6px; }
@@ -282,6 +284,10 @@
 <p>生物学上，Bunne 等人 2024 年在 Cell 的展望里把细胞写成理解健康和疾病的基本单位。现有模型还模拟不了细胞在不同状态下的行为和功能。他们提出的人工智能虚拟细胞，是直接从多尺度生物数据里学出来的模拟：分子、细胞和组织在不同条件、不同扰动下怎么变。要它具备的能力包括跨尺度的通用表示，以及可以解释的计算机实验。</p>
 <p>临床上，同一篇展望把用途写成三件：找出新的药物靶点，预测细胞对扰动的反应，以及把假设的搜索扩大到做不完的实验之外。准确的细胞模型也被他们用来追疾病的原因。他们同时把评价标准、数据需求和可解释性列为还没完成的条件。这项工作里，Tahoe 是为这种大规模模拟准备的扰动细胞语料；浏览器里的小模型只用来看知识 token 这种结构怎么工作。两者都还没有识别出新靶点，也没有进入临床决策。</p>
 <p class="when">Bunne 等，Cell，2024，<a href="https://doi.org/10.1016/j.cell.2024.11.015">10.1016/j.cell.2024.11.015</a>。</p>
+<figure class="video">
+<iframe src="https://player.bilibili.com/player.html?isOutside=true&amp;bvid=BV1LFcrztE2z&amp;p=1&amp;autoplay=0" title="虚拟细胞 webinar 9：基础模型与动态建模" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+</figure>
+<p class="when">年终特别场，虚拟细胞 webinar 9。清华、北大、同济、西湖的学者讲基础模型和动态建模。<a href="https://www.bilibili.com/video/BV1LFcrztE2z/">在 B 站打开</a>。</p>
 <h3>原理</h3>
 <p>大规模路线跟着虚拟细胞基座的想法：先在大量观察细胞上学细胞状态，再在扰动过的细胞上学转移。Tahoe-100M 的 3388 个训练分片和 Orion 的 332 个分片都已转成 h5。正在跑的是效应模型，对每个扰动预测强度、方向和幅度。种子是 42。K562 和 RPE1 留出。能跟 STATE 放在同一套 cell-eval 上比的，是下面这套集合到集合骨架；Tahoe 上的三头读出还没有接上图里的先验。</p>
 <svg class="schematic" viewBox="0 0 820 292" role="img" aria-label="对照细胞集合经过编码器和集合 Transformer，先验从被敲基因和逐基因读出两处接入">
